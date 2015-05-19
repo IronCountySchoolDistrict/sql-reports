@@ -1,0 +1,2 @@
+~[tlist_sql;SELECT att_code, description FROM attendance_code
+WHERE schoolid = ~(curschoolid) and yearid = ~(curyearid) and att_code is not null ORDER BY att_code] <option value="~(att_code)">~(att_code) - ~(description)[/tlist_sql]

@@ -1,0 +1,1 @@
+~[tlist_sql;SELECT s.id, u.lastfirst FROM Users u INNER JOIN SchoolStaff s on s.users_dcid = u.dcid WHERE s.status=1 and s.schoolid = ~(curschoolid) ORDER BY u.lastfirst] <option value="~(s.id)">~(u.lastfirst)[/tlist_sql]

@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+<!-- non framed -->
+<head>
+<title>~(Value)~[if.~([06]AddAfterTitle)>a] - ~([06]P1PassedValue)[/if]</title>
+
+~[wc:commonscripts]
+
+<script src="sqlReports.js"></script>
+
+		<style type="text/css" title="currentStyle">
+			@import "DataTables/media/css/sqlReports4.dataTables.css";
+			@import "DataTables/media/css/ColumnFilterWidgets.css";
+		</style>
+
+
+		<script type="text/javascript" language="javascript" src="DataTables/media/js/jquery.js"></script>
+		<script type="text/javascript" language="javascript" src="DataTables/media/js/jquery.dataTables.js"></script>
+		<script type="text/javascript" src="DataTables/extras/TableTools/media/js/TableTools.min.js"></script>
+		<script type="text/javascript" src="DataTables/media/js/ColVis.min.js"></script>
+		<script type="text/javascript" src="DataTables/media/js/FixedHeader.min.js"></script>
+		<script type="text/javascript" src="DataTables/media/js/ColReorder.min.js"></script>
+		<script type="text/javascript" src="DataTables/media/js/ColumnFilterWidgets.js"></script>
+		<script type="text/javascript" language="javascript" src="DataTables/media/js/rowGrouping.js"></script>
+		<script type="text/javascript" charset="utf-8">
+			$(document).ready(function() {
+
+ if($j('table#sorttedtable tr th[class="ROWGRP"]').index()>=0) {rgcolvalue=$j('table#sorttedtable tr th[class="ROWGRP"]').index()} else {rgcolvalue=false};
+
+ if($j('table#sorttedtable tr th[class="DCID"]').index()>=0) {dcidcolvalue=$j('table#sorttedtable tr th[class="DCID"]').index()} else {dcidcolvalue=false};
+
+if($j('table#sorttedtable tr th[class="HIDE"]').index()>=0) {hidecolvalue=$j('table#sorttedtable tr th[class="HIDE"]').map(function() {return $(this).index()}).get().join(',')} else {hidecolvalue='-1,'};
+
+if($j('table#sorttedtable tr th[class="NOCF"]').index()>=0) {nocfcolvalue=$j('table#sorttedtable tr th[class="NOCF"]').map(function() {return $(this).index()}).get().join(',')} else {nocfcolvalue='-1'};
+
+hideandnocf = hidecolvalue.concat(',',nocfcolvalue);
+
+nofilter = hideandnocf.split(',');
+
+nofilter.push(~[if.~([06]ValueLi4)=1]0,[/if]dcidcolvalue);
+
+~[if.~([06]NoRowSel)=]
+    $('#sorttedtable tr').click( function() {
+        $(this).toggleClass('row_selected');
+    } );
+[/if]
+
+	var oTable = $('#sorttedtable').dataTable( {
+		"sDom": '~[if#usecolfilt.~([06]UseColFilt)=1]TW[else#usecolfilt]~[if#userowgrps.~([06]UseRowGroups)=1]T[else#userowgrps]~[if#showshc.~([06]ShowSHC)=1]C[/if#showshc]~[if#usecolre.~([06]UseColRe)=1]R[/if#usecolre]T[/if#userowgrps][/if#usecolfilt]<"Top">lfrtip',
+
+					"oTableTools": {
+						"sSwfPath": "DataTables/extras/TableTools/media/swf/copy_cvs_xls_pdf.swf",
+~[if.~([06]NoRowSel)=]"sRowSelect": "multi",[/if] 
+"aButtons": [
+~[if#userowgrp.~([06]UseRowGroups)=1][else#userowgrp]
+~[if#showmcs.~([06]ValueSSB)=1]
+{
+"sExtends":    "text",                                                                                         "sButtonText": "Make Current Selection",                                                                                     "sToolTip": "Make this the current selection of students in PowerSchool",                                                                             "bSelectedOnly": true, 
+"fnClick": function ( nButton, oConfig, oFlash ) {
+
+var oTT = TableTools.fnGetInstance( 'sorttedtable' );
+
+~[if.~([06]ValueLi4)=1] oTable.fnSetColumnVis( 0 , true );[/if]
+
+if($j('table#sorttedtable tr th[class~="DISPLAY"]').index()<0)
+
+oTable.fnSetColumnVis( dcidcolvalue , true );
+
+  recsSelected = oTT.fnGetSelected().length;
+
+dcidcol = dcidcolvalue + 1 ;
+
+                            DCIDs = $j.unique($j('table#sorttedtable tbody tr td:nth-child('+dcidcol+')').map(function(){if (recsSelected==0){return $j(this).text()}else {if ($(this).parent().hasClass('row_selected'))return $j(this).text()}})).get().join(',');
+
+$j('#studSelectList').val($j('#studSelectList').val() + DCIDs);
+$j('#stform').submit();
+                                         }
+                          },
+[/if#showmcs]
+[/if#userowgrp]
+~[if#copy.~([06]HideCopy)=]
+	{"sExtends": "copy","bSelectedOnly" :true, "mColumns" : "visible","sButtonClass": ""},
+[/if#copy]
+~[if#csv.~([06]HideCSV)=]
+	{"sExtends": "csv","bSelectedOnly": true,"mColumns": "visible","sButtonClass": "" ~[if#csv2.~([06]NoCSVQuotes)=1], "sFieldBoundary": ""[/if#csv2] ~[if#csv3.~([06]NoHeaderRow)=1], "bHeader": false[/if#csv3]},
+[/if#csv]
+~[if#tab.~([06]HideTab)=]
+	{"sExtends": "xls","sButtonText": "Tab","bSelectedOnly": true,  "bBomInc": false, "sCharSet": "utf8", "mColumns": "visible","sButtonClass": "","sFileName": "*.txt" ~[if#tab2.~([06]NoHeaderRow)=1], "bHeader": false[/if#tab2]},
+[/if#tab]
+~[if#print.~([06]HidePrint)=]
+	{"sExtends": "print","bSelectedOnly" :true, "mColumns" : "visible","sMessage": "~(Value)~[if.~([06]AddAfterTitle)>a] - ~([06]P1PassedValue)[/if]","sButtonClass": ""},
+[/if#print]
+~[if#pdf.~([06]HidePDF)=]
+	{"sExtends": "pdf", "sTitle": "~(Value)~[if.~([06]AddAfterTitle)>a] - ~([06]P1PassedValue)[/if]", ~[if.~([06]PdfOrientation)=1] "sPdfOrientation": "landscape",[/if] "bSelectedOnly": true, "mColumns": "visible","sButtonClass": ""}
+[/if#pdf]
+				]	                                                  
+			},
+~[if.~([06]ValueLi4)=1]  
+"fnDrawCallback": function ( oSettings ) {
+            var that = this;
+            /* Need to redo the counters if filtered or sorted */
+            if ( oSettings.bSorted || oSettings.bFiltered )
+            {
+              this.$('td:first-child', {"filter":"applied"}).each( function (i) {
+                    that.fnUpdate( i+1, this.parentNode, 0, false, false );
+                } );
+            }
+        },
+        "aoColumnDefs": [
+            { "bSortable": false, "aTargets": [ 0 ] }
+        ],	
+[/if]
+        "aoColumnDefs": [
+            { "bVisible": false, "aTargets": [ dcidcolvalue, "HIDE"  ] }
+        ],	
+					"bPaginate": false,
+					"bLengthChange": false,
+~[if#usecolfilt.~([06]UseColFilt)=1]"bFilter": true,[else#usecolfilt]~[if#showsrch.~([06]ShowSearchBox)=1]"bFilter": true,[else#showsrch]"bFilter": false,[/if#showsrch][/if#usecolfilt]
+~[if.~([06]ShowResultsInfo)=1]"bInfo": true,[else]"bInfo": false,[/if]
+					"bSort": true,
+					"bAutoWidth": false,
+		"oColVis": {
+		"aiExclude": [ dcidcolvalue ],
+		"bRestore" :"true"
+		}, 
+		"oColumnFilterWidgets": {
+		"aiExclude": nofilter
+		},
+	} )~[if#userowgrp.~([06]UseRowGroups)=1].rowGrouping( {
+iGroupingColumnIndex: rgcolvalue, sGroupingColumnSortDirection: ~[if#rgo.~([06]RowGroupsDesc)=1]"desc"[else#rgo]"asc"[/if#rgo], bExpandableGrouping: true ~[if#displayrgc.~([06]DisplayRowGroupsCol)=1], bHideGroupingColumn: false[/if#displayrgc] ~[if#opt2.~([06]UseRowGroupsOptions)=Opt2],asExpandedGroups: [""][/if#opt2]
+})[/if#userowgrp];
+	~[if.~([06]UseFixHdr)=1]new FixedHeader( oTable );[/if]
+      ~[if#userowgrp2.~([06]UseRowGroups)=1]GridRowCount();[/if#userowgrp2]
+} );
+~[if#userowgrp3.~([06]UseRowGroups)=1]function GridRowCount() {
+            $j('span.rowCount-grid').remove();
+            $j('input.expandedOrCollapsedGroup').remove();
+
+~[if#userc.~([06]UseRowGroupsCounts)=1]
+
+            $j('.dataTables_wrapper').find('[id|=group-id]').each(function () {
+                var rowCount = $j(this).nextUntil('[id|=group-id]').length;
+                $j(this).find('td').append($j('<b />', { 'text':  ' - ' + rowCount + ' Row(s)'}));
+            });
+[/if#userc]
+
+$j('.DTTT_container').append($j('<input />', { 'type': 'button', 'class':  ~[if#opts.~([06]UseRowGroupsOptions)=Opt1]'expandedOrCollapsedGroup', 'value': 'Collapse All Groups'[else#opts]'expandedOrCollapsedGroup collapsed', 'value': 'Expand All Groups'[/if#opts] }));
+
+                $j('.expandedOrCollapsedGroup').live('click', function () {
+                    if ($j(this).hasClass('collapsed')) {
+                        $j(this).addClass('expanded').removeClass('collapsed').val('Collapse All Groups').parents('.dataTables_wrapper').find('.collapsed-group').trigger('click');
+                    }
+                    else {
+                        $j(this).addClass('collapsed').removeClass('expanded').val('Expand All Groups').parents('.dataTables_wrapper').find('.expanded-group').trigger('click');
+                    }
+                });
+                  };[/if#userowgrp3]
+		</script>
+
+<link href="/images/css/screen.css" rel="stylesheet" media="screen">
+<link href="/images/css/print.css" rel="stylesheet" media="print">
+
+<script type="text/javascript">
+function displayQuery() {
+                              var sQuery = $j('#sqlDisplay').html().replace('\n','');
+                              sQuery = sQuery.replace(/%param1%/g,$j('#pVal1').val());
+                              sQuery = sQuery.replace(/%param2%/g,$j('#pVal2').val());              
+                              sQuery = sQuery.replace(/%param3%/g,$j('#pVal3').val());              
+                              sQuery = sQuery.replace(/%param4%/g,$j('#pVal4').val());              
+                              sQuery = sQuery.replace(/%param5%/g,$j('#pVal5').val());                                                            //alert('sQuery='+sQuery+ ' pVal1='+$j('#pVal1').val());
+                              sQuery = sQuery.replace(/&lt;/g,'<').replace(/&gt;/g,'>');
+                              $j('#sqlDisplay').text(sQuery);
+                              $j('#sqlDisplay').show();
+}
+</script>
+</head>
+
+<body>
+
+<form id="stform" action="/admin/studentlist/functions.html" method="POST"><input type="hidden" id="studSelectList" name="ac" value="buildsel;table=students;list="><input style="display:none" type="submit" value="Student Functions"  alt="submit"  id="attSubmitButton" /></form>
+
+~[wc:admin_header_css]<!-- breadcrumb start --><a href="/admin/home.html">Start Page</a> &gt; <a href="home.html?frn=~(userfrn)">sqlReports</a> &gt; <a href="params.html?frn=~[gpv:frn]&lrn=~(userfrn)">Run sqlReport</a> &gt; ~(Value)<!-- breadcrumb end -->~[wc:admin_navigation_css]
+
+<!-- start of title -->
+<DIV id="sqlReport">
+<table width="100%" border="0" cellspacing="0" cellpadding="4">
+<tr>
+<td><h1>~(Value) ~[if.~([06]AddAfterTitle)>a]- ~([06]P1PassedValue)[/if]</h1></td>
+</tr>
+<tr>
+<td colspan="2">Parameters - ~[if.~([06]ParamName1)>a]<b>~([06]ParamName1):</b> ~([06]ParamVal1) &nbsp;&nbsp;[/if] <!-- added colspan for print format -->
+~[if.~([06]ParamName2)>a]<b>~([06]ParamName2):</b> ~([06]ParamVal2) &nbsp;&nbsp;[/if]
+~[if.~([06]ParamName3)>a]<b>~([06]ParamName3):</b> ~([06]ParamVal3) &nbsp;&nbsp;[/if]
+~[if.~([06]ParamName4)>a]<b>~([06]ParamName4):</b> ~([06]ParamVal4) &nbsp;&nbsp;[/if]
+~[if.~([06]ParamName5)>a]<b>~([06]ParamName5):</b> ~([06]ParamVal5)[/if]
+</td>
+</tr>
+~[if.~([06]ValueLi3)=1]
+<tr><td id="sqlDisplayTD"> <b><a href="#" onClick="displayQuery();">SQL Query</a></b><span style="display:none;" id="sqlDisplay"> ~([06]ValueT;replace=[cr],[sp])</span><input type="hidden" id="pVal1" name="[06]ParamVal1" value=""><input type="hidden" id="pVal2" name="[06]ParamVal2" value=""><input type="hidden" id="pVal3" name="[06]ParamVal3" value=""><input type="hidden" id="pVal4" name="[06]ParamVal4" value=""><input type="hidden" id="pVal5" name="[06]ParamVal5" value=""></td></tr>
+[/if]
+</table>
+<!-- end of title -->
+
+<!-- start bounding box -->
+<div class="box-round">
+
+<!-- start content -->
+<!-- table top -->
+<table  class="display" id="sorttedtable" width="100%" border="0" cellspacing="0" cellpadding="4">
+<!-- header record stored in [gen]valueT2 -->
+<thead>
+<tr bgcolor="#f6f6f6" class="bold">
+	~[if.~([06]ValueLi4)=1]<th>Count</th>[/if]  <!-- dean - v0.92 -->
+	~(ValueT2)
+</tr>
+</thead>
+<!-- tlist sql built from the paramaters page -->
+~[gpv:sqlOutput;;replace=sqlReports,ascii(126)]
+</table>
+<br>
+</div>
+~[if.~([06]ValueLi2)=1]
+<!-- fixed centering issue - Thanks Chris and Oskar! -->
+<p style="text-align:center;" class="noprint"><a href="/admin/studentlist/functions.html?ac=buildsel;table=students;list=
+~[tlist_sql;~[gpv:sqlSelect;replace=,ascii(32)]]~(line;l),[/tlist_sql]">Original Query Current Selection.</a></p>
+[/if]
+<!-- end content -->
+
+
+</DIV>
+<br>
+<!-- end bounding box -->
+<div align=center><p class="disclaimer noprint" style="text-align:center; font-size:10px">sqlReports 4 (v. 4.5a).   &copy; 2013 - present day, SIS Resources.  All rights reserved.</p></div>
+~[wc:admin_footer_css]
+
+</body>
+</html><!-- non framed -->

@@ -1,0 +1,1 @@
+~[tlist_sql;SELECT distinct c.course_number, c.course_name FROM sections sec INNER JOIN courses c on upper(c.course_number) = upper(sec.course_number) WHERE sec.termid like '~(curyearid)%%' and sec.schoolid = ~(curschoolid) ORDER BY c.course_name] <option value="~(c.course_number)">~(c.course_name) (~(c.course_number))[/tlist_sql]

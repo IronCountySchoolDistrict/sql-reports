@@ -1,0 +1,11 @@
+<script type="text/javascript">
+(function() {
+		$j("ul.tabs").append(
+			'<!-- sqlReports 4 begin -->\
+			<li class="~[if.~[gpv:repType]=sqlReports4]selected[/if]">\
+			<a href="~[if.~[gpv:repType]=sqlReports4]#[else]/admin/sqlReports4/home.html?frn=~(userfrn)[/if]">sqlReports 4</a>\
+			</li>\
+			<!-- sqlReports 4 end -->'
+		);
+}())
+</script>

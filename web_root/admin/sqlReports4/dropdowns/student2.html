@@ -1,0 +1,1 @@
+~[tlist_sql;SELECT dcid, lastfirst, grade_level FROM Students WHERE enroll_status = 0 and schoolid = ~(curschoolid) ORDER BY lastfirst] <option value="~(dcid)">~(lastfirst) (~(grade_level))[/tlist_sql]

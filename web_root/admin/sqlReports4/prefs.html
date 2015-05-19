@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<!-- non framed -->
+<head>
+<title>sqlReports Preferences</title>
+
+~[wc:commonscripts]
+<link href="/images/css/screen.css" rel="stylesheet" media="screen">
+<link href="/images/css/print.css" rel="stylesheet" media="print">
+</head>
+
+<body>
+
+<form name="form1" action="home.html?frn=~(userfrn)" method="POST">
+~[wc:admin_header_css]<!-- breadcrumb start --><a href="/admin/home.html" target="_top">Start Page</a> &gt; <a href="home.html?frn=~(userfrn)">sqlReports</a> &gt; sqlReports Preferences <!-- breadcrumb end -->~[wc:admin_navigation_css]
+
+<!-- start of title -->
+<h1>Edit sqlReports Preferences</h1>
+<!-- end of title -->
+
+<!-- start bounding box -->
+<div class="box-round">
+
+<!-- start content -->
+<table border="0" cellspacing="0" cellpadding="4">
+<tr bgcolor="#f6f6f6">
+<td class="bold">Label</td>
+<td class="bold">Value</td>
+<td class="bold" align="right"><a href="javascript:helpwindow('help.html')">sqlReports Help</a></td>
+</tr>
+<tr class="~[evenoddrow]">
+<td class="bold">Admin Group</td>
+<td colspan="2"><select name="[pref]sqlReportsAdminGrp" special="lists.groups"><option value="1"></select></td>
+</tr>
+</table>
+<!-- end content -->
+
+<!-- start button row -->
+<div class="button-row">
+<input type="hidden" name="ac" value="prim">~[submitbutton]
+</div>
+<!-- end button row -->
+
+</div>
+<br>
+<!-- end bounding box -->
+<div align=center><p class="disclaimer noprint" style="text-align:center; font-size:10px">sqlReports 4 (v. 4.5a).   &copy; 2013 - present day, SIS Resources.  All rights reserved.</p></div>
+~[wc:admin_footer_css]
+</form>
+
+</body>
+</html><!-- non framed -->

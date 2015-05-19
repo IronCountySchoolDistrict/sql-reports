@@ -1,0 +1,1 @@
+~[tlist_sql;SELECT xcr.extcolumn, g.name FROM Gen g INNER JOIN extschemacustomremap xcr on upper(xcr.custname) = upper(g.value) WHERE g.cat = 'activity' and g.schoolid in (0,~(curschoolid)) ORDER BY g.name] <option value="~(xcr.extcolumn)">~(g.name)[/tlist_sql]
