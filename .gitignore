@@ -1,1 +1,5 @@
-*.DS_STORE
+.DS_Store
+.idea
+*.zip
+node_modules
+dist
