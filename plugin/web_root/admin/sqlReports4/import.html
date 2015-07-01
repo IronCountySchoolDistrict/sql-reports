@@ -26,7 +26,7 @@ function importReport() {
 
 	first = textArray.split('<ReportDescription>');
 	first = first[1].split('</ReportDescription>'); 
-	// added code to avoid nb space.  Issue with gt/lt symbols in the sqlquery.
+    // added code to avoid nb space.  Possible issue with gt/lt symbols.
 	if (first[0]=='&nbsp;') {
 	     $j('#RptDescr').val('');
 	} else {
@@ -274,7 +274,7 @@ function importReport() {
 
     first = textArray.split('<FLSMapField>');
     first = first[1].split('</FLSMapField>');
-    // added code to avoid nb space.  Issue with gt/lt symbols in the sqlquery.
+    // added code to avoid nb space.  Possible issue with gt/lt symbols.
     if (first[0]=='&nbsp;') {
 	$j('#FLSMapField').val('');
     } else {
@@ -304,6 +304,16 @@ function importReport() {
 	first = textArray.split('<NoHeaderRow>');
 	first = first[1].split('</NoHeaderRow>'); 
 	$j('#NoHeaderRow').val(first[0]);
+
+	first = textArray.split('<ReportDirections>');
+	first = first[1].split('</ReportDirections>');
+	// added code to avoid nb space.  Issue with gt/lt symbols.
+	if(first[0]=='&nbsp;'){
+    	    $j('#RptDirections').val('');
+	} else {
+	    $j('#RptDirections').val(first[0]);
+	}
+
 
 }
 </script>
@@ -381,6 +391,8 @@ function importReport() {
 <input type="hidden" name="[06]ExecGrp" id="ExecGrp" value="">
 <input type="hidden" name="[06]ValueLi3" id="ValueLi3" value="">
 <input type="hidden" name="[06]NoHeaderRow" id="NoHeaderRow" value="">
+<input type="hidden" name="[06]RptDirections" id="RptDirections" value="">
+
 
 ~[wc:admin_header_css]<!-- breadcrumb start --><a href="/admin/home.html" target="_top">Start Page</a> &gt; <a href="home.html?frn=~(userfrn)">sqlReports</a> &gt; sqlReports Import <!-- breadcrumb end -->~[wc:admin_navigation_css]
 
@@ -417,7 +429,7 @@ function importReport() {
 </div>
 <br>
 <!-- end bounding box -->
-<div align=center><p class="disclaimer noprint" style="text-align:center; font-size:10px">sqlReports 4 (v. 4.5).   &copy; 2013 - present day, SIS Resources.  All rights reserved.</p></div>
+<div align=center><p class="disclaimer noprint" style="text-align:center; font-size:10px">sqlReports 4 (v. 4.6).   &copy; 2013 - present day, SIS Resources.  All rights reserved.</p></div>
 ~[wc:admin_footer_css]
 </form>
 

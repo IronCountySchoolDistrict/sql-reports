@@ -174,21 +174,21 @@ totalColumns--;
 </tr>
 <tr class="~[evenoddrow]">
 <td class="bold">Name</td>
-<td>
-~([06]Name)
-</td>
+<td>~([06]Name)</td>
 </tr>
 <tr class="~[evenoddrow]">
 <td class="bold">Description</td>
-<td>
-~([06]RptDescr)
-</td>
+<td>~([06]RptDescr)</td>
+</tr>
+<tr class="~[evenoddrow]">
+<td class="bold">Directions</td>
+<td>~([06]RptDirections)</td>
 </tr>
 ~[if#PN1.~([06]ParamName1)>a]
 <tr class="~[evenoddrow]">
 <td class="bold">~([06]ParamName1)</td>
 <td>
-~[if#PO1.~([06]ParamOpt1)=]<input type="text" name="[06]ParamVal1" value="" size="36" ~[if#POC1.~([06]ParamCal1)=1] class="psDateWidget"[/if#POC1]>[else#PO1]<select name="[06]ParamVal1" id="Param1">~[x:insertfile;dropdowns/~([06]ParamOpt1).html]</select>[/if#PO1]
+~[if#PO1.~([06]ParamOpt1)=]<input type="text" name="[06]ParamVal1" value="" size="50" ~[if#POC1.~([06]ParamCal1)=1] class="psDateWidget"[/if#POC1]>[else#PO1]<select name="[06]ParamVal1" id="Param1">~[x:insertfile;dropdowns/~([06]ParamOpt1).html]</select>[/if#PO1]
 </td>
 </tr>
 [else#PN1]
@@ -197,7 +197,7 @@ totalColumns--;
 ~[if#PN2.~([06]ParamName2)>a]
 <tr class="~[evenoddrow]">
 <td class="bold">~([06]ParamName2)</td>
-<td>~[if#PO2.~([06]ParamOpt2)=]<input type="text" name="[06]ParamVal2" value="" size="36" ~[if#POC2.~([06]ParamCal2)=1] class="psDateWidget"[/if#POC2]>[else#PO2]<select name="[06]ParamVal2">~[x:insertfile;dropdowns/~([06]ParamOpt2).html]</select>[/if#PO2]
+<td>~[if#PO2.~([06]ParamOpt2)=]<input type="text" name="[06]ParamVal2" value="" size="50" ~[if#POC2.~([06]ParamCal2)=1] class="psDateWidget"[/if#POC2]>[else#PO2]<select name="[06]ParamVal2">~[x:insertfile;dropdowns/~([06]ParamOpt2).html]</select>[/if#PO2]
 </td>
 </tr>
 [else#PN2]
@@ -207,7 +207,7 @@ totalColumns--;
 <tr class="~[evenoddrow]">
 <td class="bold">~([06]ParamName3)</td>
 <td>
-~[if#PO3.~([06]ParamOpt3)=]<input type="text" name="[06]ParamVal3" value="" size="36" ~[if#POC3.~([06]ParamCal3)=1] class="psDateWidget"[/if#POC3]>[else#PO3]<select name="[06]ParamVal3">~[x:insertfile;dropdowns/~([06]ParamOpt3).html]</select>[/if#PO3]
+~[if#PO3.~([06]ParamOpt3)=]<input type="text" name="[06]ParamVal3" value="" size="50" ~[if#POC3.~([06]ParamCal3)=1] class="psDateWidget"[/if#POC3]>[else#PO3]<select name="[06]ParamVal3">~[x:insertfile;dropdowns/~([06]ParamOpt3).html]</select>[/if#PO3]
 </td>
 </tr>
 [else#PN3]
@@ -217,7 +217,7 @@ totalColumns--;
 <tr class="~[evenoddrow]">
 <td class="bold">~([06]ParamName4)</td>
 <td>
-~[if#PO4.~([06]ParamOpt4)=]<input type="text" name="[06]ParamVal4" value="" size="36" ~[if#POC4.~([06]ParamCal4)=1] class="psDateWidget"[/if#POC4]>[else#PO4]<select name="[06]ParamVal4">~[x:insertfile;dropdowns/~([06]ParamOpt4).html]</select>[/if#PO4]
+~[if#PO4.~([06]ParamOpt4)=]<input type="text" name="[06]ParamVal4" value="" size="50" ~[if#POC4.~([06]ParamCal4)=1] class="psDateWidget"[/if#POC4]>[else#PO4]<select name="[06]ParamVal4">~[x:insertfile;dropdowns/~([06]ParamOpt4).html]</select>[/if#PO4]
 </td>
 </tr>
 [else#PN4]
@@ -227,7 +227,7 @@ totalColumns--;
 <tr class="~[evenoddrow]">
 <td class="bold">~([06]ParamName5)</td>
 <td>
-~[if#PO5.~([06]ParamOpt5)=]<input type="text" name="[06]ParamVal5" value="" size="36" ~[if#POC5.~([06]ParamCal5)=1] class="psDateWidget"[/if#POC5]>[else#PO5]<select name="[06]ParamVal5">~[x:insertfile;dropdowns/~([06]ParamOpt5).html]</select>[/if#PO5]
+~[if#PO5.~([06]ParamOpt5)=]<input type="text" name="[06]ParamVal5" value="" size="50" ~[if#POC5.~([06]ParamCal5)=1] class="psDateWidget"[/if#POC5]>[else#PO5]<select name="[06]ParamVal5">~[x:insertfile;dropdowns/~([06]ParamOpt5).html]</select>[/if#PO5]
 </td>
 </tr>
 [else#PN5]
@@ -304,7 +304,7 @@ Y Axis Label&nbsp;<input type="text" name="chartyaxis" value="~[gpv:chartyaxis]"
 </div>
 <br>
 <!-- end bounding box -->
-<div align=center><p class="disclaimer noprint" style="text-align:center; font-size:10px">sqlReports 4 (v. 4.5a).   &copy; 2013 - present day, SIS Resources.  All rights reserved.</p></div>
+<div align=center><p class="disclaimer noprint" style="text-align:center; font-size:10px">sqlReports 4 (v. 4.6).   &copy; 2013 - present day, SIS Resources.  All rights reserved.</p></div>
 ~[wc:admin_footer_css]
 </form>
 

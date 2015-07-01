@@ -4,7 +4,7 @@
     xsi:schemaLocation="http://plugin.powerschool.pearson.com plugin.xsd"
     description="sqlReports 4" 
     name="sqlReports 4" 
-    version="4.5a">
+    version="4.6">
 
     <publisher name="Matt Freund">
         <contact email="matt@sisresources.com"/>

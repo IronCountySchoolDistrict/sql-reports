@@ -3,12 +3,12 @@
 <!-- non framed -->
 <head>
 <title>sqlReports Edit</title>
-<script type="text/javascript" src="<!-- @echo IMAGE_SERVER_URL -->/scripts/sql-reports/sqlReports.js"></script>
+<script type="text/javascript" src="<!-- @echo IMAGE_SERVER_URL -->/sql-reports/js/sqlReports.js"></script>
 
 <!-- for group dropdown -->
-<script type="text/javascript" src="<!-- @echo IMAGE_SERVER_URL -->/scripts/sql-reports/combolist.js"></script>
+<script type="text/javascript" src="<!-- @echo IMAGE_SERVER_URL -->/sql-reports/js/combolist.js"></script>
 <!-- for multiselect security groups -->
-<script type="text/javascript" src="<!-- @echo IMAGE_SERVER_URL -->/scripts/sql-reports/multiselect_script.js"></script>
+<script type="text/javascript" src="<!-- @echo IMAGE_SERVER_URL -->/sql-reports/js/multiselect_script.js"></script>
 
 <script language=javascript>
 function buildStudentSelectionQuery () {
@@ -173,11 +173,11 @@ document.forms[0].elements['~(JSFieldParam;[06]InitialChartName)'].value = ICSel
 		</tr>
 		<tr class="~[evenoddrow]">
 		<td class="bold">Report Name</td>
-		<td><input type="text" name="[06]name" value="" size=36></td>
+		<td><input type="text" name="[06]name" value="" size=50></td>
 		</tr>
 		<tr class="~[evenoddrow]">
 		<td class="bold">Report Title</td>
-		<td><input type="text" name="[06]value" value="" size=36></td>
+		<td><input type="text" name="[06]value" value="" size=50></td>
 		</tr>
 		<tr class="~[evenoddrow]">
 		<td class="bold">Add After Report Title</td>
@@ -233,7 +233,7 @@ document.forms[0].elements['~(JSFieldParam;[06]InitialChartName)'].value = ICSel
 <h2 class="toggle collapsed">Important Information Regarding Report Title, Description, SQL Query, and Report Header</h2>
 <table>
 		<tr>
-		<td colspan=2>Do not use double quotes in your Report Title.  Doing so will cause the report to not output correctly because the double quotes will cause html issues on the report output page.  Buttons will not display and row colors will be off.<br><br>If your Report Description starts with a &lt, such as &ltbr&gt, the description will not export.  The same is true for Notes.  Either avoid using an &lt at the start or if you do use one, after you do the export, copy the report description manually into the export file.  Do the same for Notes if needed.<br><br>Avoid using the following in the select clause in the SQL Query: double quotes around field aliases (other than externalexpression, aliases are not needed as column names will be added in the Report Header area instead), and reserved characters, such as colon and semi-colon. For a colon use chr(58) and for a semi-colon use chr(59).  If you're concatenating and need a comma, use chr(44) instead.  Also, you can drag the bottom left-hand corner of the input box down to have a bigger box.<br><br>To display the external expression in a report (the external expression is sometimes different than the value in the expression field), add externalexpression as an alias to the expression field in your sql.  For example, if your sql has cc.expression as one of the fields, use cc.expression externalexpression in the sql.  The externalexpression alias will trigger coding in the report to display the external expression instead.<br><br>In the Report Header, make sure you have an adequate number of headings, otherwise your report output will be off.  Do not press enter after any report header - just keep them all on a continuous line.  Pressing enter after any of them will cause white space to appear above the report.  Buttons will not display and row colors will be off.  With Report Headings, there are five class= commands you can use in a &ltth&gt: DCID, DCID DISPLAY, HIDE, NOCF, and ROWGRP.  The DCID ones are explained under the Student Selection tab.  The HIDE command is useful to hide a column needed for the SQL but you don't want to display, or when using the show/hide columns button and you want to hide columns initially that the user can show using the button.  The NOCF command is used when Column Filtering is enabled to remove filtering for a visible column.  The ROWGRP command is used when Row Grouping is enabled and uses the column for row grouping purposes.</td>
+		<td colspan=2>Do not use double quotes in your Report Title.  Doing so will cause the report to not output correctly because the double quotes will cause html issues on the report output page.  Buttons will not display and row colors will be off.<br><br>If your Report Description starts with a &lt, such as &ltbr&gt, the description will not export.  The same is true for Directions and Notes.  Either avoid using an &lt at the start or if you do use one, after you do the export, copy the report description manually into the export file.  Do the same for Directions and Notes if needed.<br><br>Avoid using the following in the select clause in the SQL Query: double quotes around field aliases (other than externalexpression, aliases are not needed as column names will be added in the Report Header area instead), and reserved characters, such as colon and semi-colon. For a colon use chr(58) and for a semi-colon use chr(59).  If you're concatenating and need a comma, use chr(44) instead.  Also, you can drag the bottom left-hand corner of the input box down to have a bigger box.<br><br>To display the external expression in a report (the external expression is sometimes different than the value in the expression field), add externalexpression as an alias to the expression field in your sql.  For example, if your sql has cc.expression as one of the fields, use cc.expression externalexpression in the sql.  The externalexpression alias will trigger coding in the report to display the external expression instead.<br><br>In the Report Header, make sure you have an adequate number of headings, otherwise your report output will be off.  Do not press enter after any report header - just keep them all on a continuous line.  Pressing enter after any of them will cause white space to appear above the report.  Buttons will not display and row colors will be off.  With Report Headings, there are five class= commands you can use in a &ltth&gt: DCID, DCID DISPLAY, HIDE, NOCF, and ROWGRP.  The DCID ones are explained under the Student Selection tab.  The HIDE command is useful to hide a column needed for the SQL but you don't want to display, or when using the show/hide columns button and you want to hide columns initially that the user can show using the button.  The NOCF command is used when Column Filtering is enabled to remove filtering for a visible column.  The ROWGRP command is used when Row Grouping is enabled and uses the column for row grouping purposes.</td>
 		</tr>
 </table>
 <table>
@@ -248,7 +248,15 @@ document.forms[0].elements['~(JSFieldParam;[06]InitialChartName)'].value = ICSel
 
 
    <div id="tabParams"> 
+   <h2>Directions</h2> 
+	<table border="0" cellspacing="0" cellpadding="4">
+		<tr class="~[evenoddrow;reset]">
+		<td class="bold">Directions</td>
+		<td><textarea name="[06]RptDirections" rows="10" cols="100"></textarea></td>
+		</tr>
+        </table>
    <h2>Parameters</h2>
+<div><p>Do not use the following in the 'Name to Display' boxes as they can cause your parameter to not show when running the report: 1) the word Date by itself, 2) a colon at the end of the name, 3) the words studentid or yearid.</p></div>
 	<table border="0" cellspacing="0" cellpadding="4">
 		<tr bgcolor="#f6f6f6">
 		<td class="bold">Optional Parameters</td>
@@ -288,11 +296,8 @@ document.getElementById("PO4menu").value = "~([06]ParamOpt4)";
 document.getElementById("PO5menu").value = "~([06]ParamOpt5)";</script>
 <!-- End Dynamic Menu Selected Coding-->
 
-<h2 class="toggle collapsed">Information Regarding Name to Display, Add <img src="/images/icon-calendar.png">, and Use Drop Down</h2>
+<h2 class="toggle collapsed">Important Information Regarding Add <img src="/images/icon-calendar.png">, and Use Drop Down</h2>
 <table>
-<tr>
-<td><u>Name to Display</u>:<br>Do not use the following as they can cause your parameter to not show when running the report: 1) the word Date by itself, 2) a colon at the end of the parameter name, 3) the words studentid or yearid.</td>
-</tr>
 <tr>
 <td><u>Add <img src="/images/icon-calendar.png"></u>:<br>If you want a calendar popup to be next to the text  entry box, check this option.  Will be ignored if a drop down is used.</td>
 </tr>
@@ -548,7 +553,7 @@ document.getElementById("PO5menu").value = "~([06]ParamOpt5)";</script>
 </div>
 <br>
 <!-- end bounding box -->
-<div align=center><p class="disclaimer noprint" style="text-align:center; font-size:10px">sqlReports 4 (v. 4.5a).   &copy; 2013 - present day, SIS Resources.  All rights reserved.</p></div>
+<div align=center><p class="disclaimer noprint" style="text-align:center; font-size:10px">sqlReports 4 (v. 4.6).   &copy; 2013 - present day, SIS Resources.  All rights reserved.</p></div>
 ~[wc:admin_footer_css]
 </form>
 

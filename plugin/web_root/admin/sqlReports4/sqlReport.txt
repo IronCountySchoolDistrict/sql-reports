@@ -58,3 +58,6 @@
 ~[if.~([06]ExecGrp)=]<ExecGrp></ExecGrp>[else]<ExecGrp>~([06]ExecGrp)</ExecGrp>[/if]
 ~[if.~([06]ValueLi3)=]<ValueLi3></ValueLi3>[else]<ValueLi3>~([06]ValueLi3)</ValueLi3>[/if]
 ~[if.~([06]NoHeaderRow)=]<NoHeaderRow></NoHeaderRow>[else]<NoHeaderRow>~([06]NoHeaderRow)</NoHeaderRow>[/if]
+~[if.~([06]RptDirections)=]<ReportDirections></ReportDirections>[else]<ReportDirections>~([06]RptDirections)</ReportDirections>[/if]
+
+
