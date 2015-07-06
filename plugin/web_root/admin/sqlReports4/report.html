@@ -9,19 +9,19 @@
 <script src="<!-- @echo IMAGE_SERVER_URL -->/sql-reports/js/sqlReports.js"></script>
 
 		<style type="text/css" title="currentStyle">
-			@import "/* @echo IMAGE_SERVER_URL *//sql-reports/ext/DataTables/media/css/sqlReports4.dataTables.css";
-			@import "/* @echo IMAGE_SERVER_URL *//sql-reports/ext/DataTables/media/css/ColumnFilterWidgets.css";
+			@import "<!-- @echo IMAGE_SERVER_URL -->/sql-reports/ext/DataTables/media/css/sqlReports4.dataTables.css";
+			@import "<!-- @echo IMAGE_SERVER_URL -->/sql-reports/ext/DataTables/media/css/ColumnFilterWidgets.css";
 		</style>
 
 
-		<script type="text/javascript" language="javascript" src="DataTables/media/js/jquery.js"></script>
-		<script type="text/javascript" language="javascript" src="DataTables/media/js/jquery.dataTables.js"></script>
-		<script type="text/javascript" src="DataTables/extras/TableTools/media/js/TableTools.min.js"></script>
-		<script type="text/javascript" src="DataTables/media/js/ColVis.min.js"></script>
-		<script type="text/javascript" src="DataTables/media/js/FixedHeader.min.js"></script>
-		<script type="text/javascript" src="DataTables/media/js/ColReorder.min.js"></script>
-		<script type="text/javascript" src="DataTables/media/js/ColumnFilterWidgets.js"></script>
-		<script type="text/javascript" language="javascript" src="DataTables/media/js/rowGrouping.js"></script>
+		<script type="text/javascript" language="javascript" src="<!-- @echo IMAGE_SERVER_URL -->/sql-reports/ext/DataTables/media/js/jquery.js"></script>
+		<script type="text/javascript" language="javascript" src="<!-- @echo IMAGE_SERVER_URL -->/sql-reports/ext/DataTables/media/js/jquery.dataTables.js"></script>
+		<script type="text/javascript" src="<!-- @echo IMAGE_SERVER_URL -->/sql-reports/ext/DataTables/extras/TableTools/media/js/TableTools.min.js"></script>
+		<script type="text/javascript" src="<!-- @echo IMAGE_SERVER_URL -->/sql-reports/ext/DataTables/media/js/ColVis.min.js"></script>
+		<script type="text/javascript" src="<!-- @echo IMAGE_SERVER_URL -->/sql-reports/ext/DataTables/media/js/FixedHeader.min.js"></script>
+		<script type="text/javascript" src="<!-- @echo IMAGE_SERVER_URL -->/sql-reports/ext/DataTables/media/js/ColReorder.min.js"></script>
+		<script type="text/javascript" src="<!-- @echo IMAGE_SERVER_URL -->/sql-reports/ext/DataTables/media/js/ColumnFilterWidgets.js"></script>
+		<script type="text/javascript" language="javascript" src="<!-- @echo IMAGE_SERVER_URL -->/sql-reports/ext/DataTables/media/js/rowGrouping.js"></script>
 		<script type="text/javascript" charset="utf-8">
 			$(document).ready(function() {
 
@@ -49,7 +49,7 @@ nofilter.push(~[if.~([06]ValueLi4)=1]0,[/if]dcidcolvalue);
 		"sDom": '~[if#usecolfilt.~([06]UseColFilt)=1]TW[else#usecolfilt]~[if#userowgrps.~([06]UseRowGroups)=1]T[else#userowgrps]~[if#showshc.~([06]ShowSHC)=1]C[/if#showshc]~[if#usecolre.~([06]UseColRe)=1]R[/if#usecolre]T[/if#userowgrps][/if#usecolfilt]<"Top">lfrtip',
 
 					"oTableTools": {
-						"sSwfPath": "DataTables/extras/TableTools/media/swf/copy_cvs_xls_pdf.swf",
+						"sSwfPath": "<!-- @echo IMAGE_SERVER_URL -->/sql-reports/ext/DataTables/extras/TableTools/media/swf/copy_cvs_xls_pdf.swf",
 ~[if.~([06]NoRowSel)=]"sRowSelect": "multi",[/if] 
 "aButtons": [
 ~[if#userowgrp.~([06]UseRowGroups)=1][else#userowgrp]
