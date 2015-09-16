@@ -3,12 +3,12 @@
 <!-- non framed -->
 <head>
 <title>sqlReports Edit</title>
-<script type="text/javascript" src="<!-- @echo IMAGE_SERVER_URL -->/sql-reports/js/sqlReports.js"></script>
+<script type="text/javascript" src="/scripts/sql-reports/js/sqlReports.js"></script>
 
 <!-- for group dropdown -->
-<script type="text/javascript" src="<!-- @echo IMAGE_SERVER_URL -->/sql-reports/js/combolist.js"></script>
+<script type="text/javascript" src="/scripts/sql-reports/js/combolist.js"></script>
 <!-- for multiselect security groups -->
-<script type="text/javascript" src="<!-- @echo IMAGE_SERVER_URL -->/sql-reports/js/multiselect_script.js"></script>
+<script type="text/javascript" src="/scripts/sql-reports/js/multiselect_script.js"></script>
 
 <script language=javascript>
 function buildStudentSelectionQuery () {
@@ -144,7 +144,7 @@ document.forms[0].elements['~(JSFieldParam;[06]InitialChartName)'].value = ICSel
 
 ~[if.security.inrole=~[displaypref:sqlReportsAdminGrp]]
 
-<form name="form1" action="home.html?frn=~(userfrn)" method="POST" onsubmit="ChartName(),LastUpdated()">  
+<form name="form1" action="home.html?frn=~(userfrn)" method="POST" onsubmit="ChartName(),LastUpdated()">
 
 <!-- start of title -->
 <table><tr><td><h1>Edit sqlReport - ~([06]name)</h1></td><td class="bold" align="right"><a href="javascript:helpwindow('help.html')">sqlReports Help</a></td></tr></table>
@@ -154,22 +154,22 @@ document.forms[0].elements['~(JSFieldParam;[06]InitialChartName)'].value = ICSel
 
 <!-- start content -->
 
-<div class="tabs"> 
-   <ul> 
-     <li> <a href="#tabReport">Report</a></li> 
-     <li> <a href="#tabParams">Parameters</a></li> 
-     <li> <a href="#tabStuSel">Student Selection</a></li> 
-	<li> <a href="#tabRunAcc">Run Access</a></li> 
-	<li> <a href="#tabResults">Results Page</a></li> 
-	<li> <a href="#tabNotes">Notes</a></li> 
-   </ul> 
-   <div id="tabReport"> 
+<div class="tabs">
+   <ul>
+     <li> <a href="#tabReport">Report</a></li>
+     <li> <a href="#tabParams">Parameters</a></li>
+     <li> <a href="#tabStuSel">Student Selection</a></li>
+	<li> <a href="#tabRunAcc">Run Access</a></li>
+	<li> <a href="#tabResults">Results Page</a></li>
+	<li> <a href="#tabNotes">Notes</a></li>
+   </ul>
+   <div id="tabReport">
      <h2>Report</h2>
 		<table border="0" cellspacing="0" cellpadding="4">
 		<tr bgcolor="#f6f6f6">
 		<td class="bold">Label</td>
 		<td class="bold">Value</td>
-		
+
 		</tr>
 		<tr class="~[evenoddrow]">
 		<td class="bold">Report Name</td>
@@ -243,12 +243,12 @@ document.forms[0].elements['~(JSFieldParam;[06]InitialChartName)'].value = ICSel
 		</tr>
 </table>
 
-  </div> 
+  </div>
 
 
 
-   <div id="tabParams"> 
-   <h2>Directions</h2> 
+   <div id="tabParams">
+   <h2>Directions</h2>
 	<table border="0" cellspacing="0" cellpadding="4">
 		<tr class="~[evenoddrow;reset]">
 		<td class="bold">Directions</td>
@@ -284,7 +284,7 @@ document.forms[0].elements['~(JSFieldParam;[06]InitialChartName)'].value = ICSel
 		<tr class="~[evenoddrow]">
 		<td class="bold">Parameter 5</td>
 		<td><input type="text" name="[06]ParamName5" value="" size=36></td><td><input type="text" name="[06]ParamVal5" value="" size=16></td><td><input type="checkbox" name="[06]ParamCal5" value=""></td><td><select id="PO5menu" name="[06]ParamOpt5">~[x:insertfile;dropdownmenu.html]</select></td>
-		</tr>  
+		</tr>
 	</table>
 
 <!-- Added with v4.0 - Dynamic Menu Item Selected Coding-->
@@ -308,7 +308,7 @@ document.getElementById("PO5menu").value = "~([06]ParamOpt5)";</script>
 
 	</table>
 
-   </div> 
+   </div>
 
    <div id="tabStuSel" >
     <h2>Student Selection</h2>
@@ -333,7 +333,7 @@ document.getElementById("PO5menu").value = "~([06]ParamOpt5)";</script>
 		<td colspan="2"><input type="checkbox" name="[06]ValueSSB" value=""></td>
 		</tr>
 	</table>
-   </div> 
+   </div>
 
    <div id="tabRunAcc" >
     <h2>Run Access</h2>
@@ -355,7 +355,7 @@ document.getElementById("PO5menu").value = "~([06]ParamOpt5)";</script>
 		</script>
 	</table>
 	<!-- end v3.0 -->
-   </div> 
+   </div>
 
    <div id="tabResults">
       <tr><td colspan="3"><h2>Results Page</h2></td></tr>
@@ -520,7 +520,7 @@ document.getElementById("PO5menu").value = "~([06]ParamOpt5)";</script>
 		<td colspan=2>Column Filtering and Row Grouping do not interact well with Show/Hide Columns or Column Reordering.  If you enable either Column Filtering or Row Grouping, then Show/Hide Columns and Column Reordering will be disabled on the output.  Column Filtering needs the search box, so the search box will appear even if it hasn't been checked above.<br><br>Also, Row Grouping causes issues with Option B Student Selection, which is the one that adds the Make Current Selection button.  It will add erroneous information to the dcid values and make the selection incorrect.  If you have Row Grouping enabled, then Option B will be ignored and no Make Current Selection button will appear on the output.</td>
 		</tr>
 </table>
-   </div> 
+   </div>
 
 <div id="tabNotes" >
     <h2>Notes - you can use this section to document your report (creation, changes, etc.)</h2>

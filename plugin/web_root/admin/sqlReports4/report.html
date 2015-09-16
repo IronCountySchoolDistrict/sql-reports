@@ -6,22 +6,22 @@
 
 ~[wc:commonscripts]
 
-<script src="<!-- @echo IMAGE_SERVER_URL -->/sql-reports/js/sqlReports.js"></script>
+<script src="/scripts/sql-reports/js/sqlReports.js"></script>
 
 		<style type="text/css" title="currentStyle">
-			@import "<!-- @echo IMAGE_SERVER_URL -->/sql-reports/ext/DataTables/media/css/sqlReports4.dataTables.css";
-			@import "<!-- @echo IMAGE_SERVER_URL -->/sql-reports/ext/DataTables/media/css/ColumnFilterWidgets.css";
+			@import "/scripts/sql-reports/lib/DataTables/media/css/sqlReports4.dataTables.css";
+			@import "/scripts/sql-reports/lib/DataTables/media/css/ColumnFilterWidgets.css";
 		</style>
 
 
-		<script type="text/javascript" language="javascript" src="<!-- @echo IMAGE_SERVER_URL -->/sql-reports/ext/DataTables/media/js/jquery.js"></script>
-		<script type="text/javascript" language="javascript" src="<!-- @echo IMAGE_SERVER_URL -->/sql-reports/ext/DataTables/media/js/jquery.dataTables.js"></script>
-		<script type="text/javascript" src="<!-- @echo IMAGE_SERVER_URL -->/sql-reports/ext/DataTables/extras/TableTools/media/js/TableTools.min.js"></script>
-		<script type="text/javascript" src="<!-- @echo IMAGE_SERVER_URL -->/sql-reports/ext/DataTables/media/js/ColVis.min.js"></script>
-		<script type="text/javascript" src="<!-- @echo IMAGE_SERVER_URL -->/sql-reports/ext/DataTables/media/js/FixedHeader.min.js"></script>
-		<script type="text/javascript" src="<!-- @echo IMAGE_SERVER_URL -->/sql-reports/ext/DataTables/media/js/ColReorder.min.js"></script>
-		<script type="text/javascript" src="<!-- @echo IMAGE_SERVER_URL -->/sql-reports/ext/DataTables/media/js/ColumnFilterWidgets.js"></script>
-		<script type="text/javascript" language="javascript" src="<!-- @echo IMAGE_SERVER_URL -->/sql-reports/ext/DataTables/media/js/rowGrouping.js"></script>
+		<script type="text/javascript" language="javascript" src="/scripts/sql-reports/lib/DataTables/media/js/jquery.js"></script>
+		<script type="text/javascript" language="javascript" src="/scripts/sql-reports/lib/DataTables/media/js/jquery.dataTables.js"></script>
+		<script type="text/javascript" src="/scripts/sql-reports/lib/DataTables/extras/TableTools/media/js/TableTools.min.js"></script>
+		<script type="text/javascript" src="/scripts/sql-reports/lib/DataTables/media/js/ColVis.min.js"></script>
+		<script type="text/javascript" src="/scripts/sql-reports/lib/DataTables/media/js/FixedHeader.min.js"></script>
+		<script type="text/javascript" src="/scripts/sql-reports/lib/DataTables/media/js/ColReorder.min.js"></script>
+		<script type="text/javascript" src="/scripts/sql-reports/lib/DataTables/media/js/ColumnFilterWidgets.js"></script>
+		<script type="text/javascript" language="javascript" src="/scripts/sql-reports/lib/DataTables/media/js/rowGrouping.js"></script>
 		<script type="text/javascript" charset="utf-8">
 			$(document).ready(function() {
 
@@ -49,13 +49,13 @@ nofilter.push(~[if.~([06]ValueLi4)=1]0,[/if]dcidcolvalue);
 		"sDom": '~[if#usecolfilt.~([06]UseColFilt)=1]TW[else#usecolfilt]~[if#userowgrps.~([06]UseRowGroups)=1]T[else#userowgrps]~[if#showshc.~([06]ShowSHC)=1]C[/if#showshc]~[if#usecolre.~([06]UseColRe)=1]R[/if#usecolre]T[/if#userowgrps][/if#usecolfilt]<"Top">lfrtip',
 
 					"oTableTools": {
-						"sSwfPath": "<!-- @echo IMAGE_SERVER_URL -->/sql-reports/ext/DataTables/extras/TableTools/media/swf/copy_cvs_xls_pdf.swf",
-~[if.~([06]NoRowSel)=]"sRowSelect": "multi",[/if] 
+						"sSwfPath": "/scripts/sql-reports/lib/DataTables/extras/TableTools/media/swf/copy_cvs_xls_pdf.swf",
+~[if.~([06]NoRowSel)=]"sRowSelect": "multi",[/if]
 "aButtons": [
 ~[if#userowgrp.~([06]UseRowGroups)=1][else#userowgrp]
 ~[if#showmcs.~([06]ValueSSB)=1]
 {
-"sExtends":    "text",                                                                                         "sButtonText": "Make Current Selection",                                                                                     "sToolTip": "Make this the current selection of students in PowerSchool",                                                                             "bSelectedOnly": true, 
+"sExtends":    "text",                                                                                         "sButtonText": "Make Current Selection",                                                                                     "sToolTip": "Make this the current selection of students in PowerSchool",                                                                             "bSelectedOnly": true,
 "fnClick": function ( nButton, oConfig, oFlash ) {
 
 var oTT = TableTools.fnGetInstance( 'sorttedtable' );
@@ -93,9 +93,9 @@ $j('#stform').submit();
 ~[if#pdf.~([06]HidePDF)=]
 	{"sExtends": "pdf", "sTitle": "~(Value)~[if.~([06]AddAfterTitle)>a] - ~([06]P1PassedValue)[/if]", ~[if.~([06]PdfOrientation)=1] "sPdfOrientation": "landscape",[/if] "bSelectedOnly": true, "mColumns": "visible","sButtonClass": ""}
 [/if#pdf]
-				]	                                                  
+				]
 			},
-~[if.~([06]ValueLi4)=1]  
+~[if.~([06]ValueLi4)=1]
 "fnDrawCallback": function ( oSettings ) {
             var that = this;
             /* Need to redo the counters if filtered or sorted */
@@ -108,11 +108,11 @@ $j('#stform').submit();
         },
         "aoColumnDefs": [
             { "bSortable": false, "aTargets": [ 0 ] }
-        ],	
+        ],
 [/if]
         "aoColumnDefs": [
             { "bVisible": false, "aTargets": [ dcidcolvalue, "HIDE"  ] }
-        ],	
+        ],
 					"bPaginate": false,
 					"bLengthChange": false,
 ~[if#usecolfilt.~([06]UseColFilt)=1]"bFilter": true,[else#usecolfilt]~[if#showsrch.~([06]ShowSearchBox)=1]"bFilter": true,[else#showsrch]"bFilter": false,[/if#showsrch][/if#usecolfilt]
@@ -122,7 +122,7 @@ $j('#stform').submit();
 		"oColVis": {
 		"aiExclude": [ dcidcolvalue ],
 		"bRestore" :"true"
-		}, 
+		},
 		"oColumnFilterWidgets": {
 		"aiExclude": nofilter
 		},
@@ -164,9 +164,9 @@ $j('.DTTT_container').append($j('<input />', { 'type': 'button', 'class':  ~[if#
 function displayQuery() {
                               var sQuery = $j('#sqlDisplay').html().replace('\n','');
                               sQuery = sQuery.replace(/%param1%/g,$j('#pVal1').val());
-                              sQuery = sQuery.replace(/%param2%/g,$j('#pVal2').val());              
-                              sQuery = sQuery.replace(/%param3%/g,$j('#pVal3').val());              
-                              sQuery = sQuery.replace(/%param4%/g,$j('#pVal4').val());              
+                              sQuery = sQuery.replace(/%param2%/g,$j('#pVal2').val());
+                              sQuery = sQuery.replace(/%param3%/g,$j('#pVal3').val());
+                              sQuery = sQuery.replace(/%param4%/g,$j('#pVal4').val());
                               sQuery = sQuery.replace(/%param5%/g,$j('#pVal5').val());                                                            //alert('sQuery='+sQuery+ ' pVal1='+$j('#pVal1').val());
                               sQuery = sQuery.replace(/&lt;/g,'<').replace(/&gt;/g,'>');
                               $j('#sqlDisplay').text(sQuery);
