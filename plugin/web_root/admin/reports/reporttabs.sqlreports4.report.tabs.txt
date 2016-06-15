@@ -1,11 +1,17 @@
-<script type="text/javascript">
-(function() {
-		$j("ul.tabs").prepend(
-			'<!-- sqlReports 4 begin -->\
-			<li class="~[if.~[gpv:repType]=sqlReports4]selected[/if]">\
-			<a href="~[if.~[gpv:repType]=sqlReports4]#[else]/admin/sqlReports4/home.html?frn=~(userfrn)[/if]">ICSDReports</a>\
-			</li>\
-			<!-- sqlReports 4 end -->'
-		);
-}())
+<script type="text/template" id="sql-reports-tab">
+	<li class="~[if.~[gpv:repType]=sqlReports4]selected[/if]">
+		<a href="~[if.~[gpv:repType]=sqlReports4]#[else]/admin/sqlReports4/home.html?frn=~(userfrn)[/if]">ICSDReports</a>
+	</li>
+</script>
+
+<script>
+	require.config({
+		paths: {
+			'link': '/scripts/sql-reports/js/link'
+		}
+	});
+
+	require(['link'], function (link) {
+		link.main();
+	});
 </script>

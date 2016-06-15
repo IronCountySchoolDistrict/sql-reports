@@ -1,0 +1,7 @@
+~[tlist_sql;select sec.id, c.course_name, t.abbreviation, sec.course_number||'.'||sec.section_number crssec, sec.expression
+from sectionteacher st
+inner join sections sec on sec.id = st.sectionid
+inner join courses c on upper(c.course_number) = upper(sec.course_number)
+inner join terms t on t.id = sec.termid and t.yearid = ~(curyearid) and t.schoolid = ~(curschoolid)
+where st.teacherid = ~[x:userid]
+order by t.abbreviation, sec.expression, c.course_name] <option value="~(sec.id)">~(c.course_name)  (~(t.abbreviation) - ~(crssec) - ~(sec.expression;t;externalexpression))[/tlist_sql]

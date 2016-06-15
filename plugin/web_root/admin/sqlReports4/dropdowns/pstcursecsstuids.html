@@ -1,0 +1,13 @@
+~[tlist_sql;select distinct s.id, s.lastfirst, s.grade_level
+from cc cc
+inner join students s on s.id = cc.studentid
+where cc.sectionid in
+(select sec.id
+from sectionteacher st
+inner join sections sec on sec.id = st.sectionid
+inner join 
+(select t.id id from terms t join (select id id, firstday fd, lastday ld from terms where id = ~(curtermid) and yearid =~(curyearid) and schoolid=~(curschoolid)) curterm on 1=1
+where ((t.firstday between curterm.fd and curterm.ld) or (t.lastday between curterm.fd and curterm.ld)) and t.yearid = ~(curyearid) and t.schoolid = ~(curschoolid)) allterms on allterms.id = sec.termid
+inner join terms t on t.id = sec.termid and t.yearid = ~(curyearid) and t.schoolid = ~(curschoolid)
+where st.teacherid = ~[x:userid])
+order by s.lastfirst] <option value="~(s.id)">~(s.lastfirst) (~(s.grade_level))[/tlist_sql]

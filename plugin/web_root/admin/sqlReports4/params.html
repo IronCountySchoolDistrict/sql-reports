@@ -275,7 +275,7 @@ Y Axis Label&nbsp;<input type="text" name="chartyaxis" value="~[gpv:chartyaxis]"
    <script type="text/javascript">
  FusionCharts.printManager.enabled(true);
       var myChart = new FusionCharts("/flash/~[gpv:charttype].swf", "myChartId");
-      myChart.setDataXML("<graph caption='~([06]Value)' ~[if#aat.~([06]AddAfterTitle)>a]subcaption='~([06]P1PassedValue)'[/if#aat] xAxisName='~[gpv:chartxaxis]' yAxisName='~[gpv:chartyaxis]' showNames='1' decimalPrecision='0' formatNumberScale='0' chartLeftMargin='20' chartRightMargin='30' showAboutMenuItem='1' aboutMenuItemLabel='sqlCharts Home Page' aboutMenuItemLink='n-http://www.sqlreports4.com/add-ons/sqlcharts'>~[tlist_sql;~[gpv:sqlChartQuery;;replace=sqlReports,ascii(126)]]<set label='~(1)' value='~(2)'/>[/tlist_sql]</graph>");
+      myChart.setDataXML("<graph caption='~([06]Value)' ~[if#aat.~([06]AddAfterTitle)>a]subcaption='~([06]P1PassedValue)'[/if#aat] xAxisName='~[gpv:chartxaxis]' yAxisName='~[gpv:chartyaxis]' showNames='1' decimalPrecision='0' formatNumberScale='0' chartLeftMargin='20' chartRightMargin='30' showAboutMenuItem='1' aboutMenuItemLabel='sqlCharts Home Page' aboutMenuItemLink='n-http://www.sqlreports4.com/addons/sqlcharts'>~[tlist_sql;~[gpv:sqlChartQuery;;replace=sqlReports,ascii(126)]]<set label='~(1)' value='~(2)'/>[/tlist_sql]</graph>");
       
       myChart.render("chartdiv");
    </script>
@@ -304,7 +304,7 @@ Y Axis Label&nbsp;<input type="text" name="chartyaxis" value="~[gpv:chartyaxis]"
 </div>
 <br>
 <!-- end bounding box -->
-<div align=center><p class="disclaimer noprint" style="text-align:center; font-size:10px">sqlReports 4 (v. 4.6).   &copy; 2013 - present day, SIS Resources.  All rights reserved.</p></div>
+<div align=center><p class="disclaimer noprint" style="text-align:center; font-size:10px">sqlReports 4 (v. 4.7.0).   &copy; 2013 - present day, SIS Resources.  All rights reserved.</p></div>
 ~[wc:admin_footer_css]
 </form>
 
