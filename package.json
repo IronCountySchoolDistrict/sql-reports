@@ -1,6 +1,6 @@
 {
   "name": "sql-reports",
-  "version": "4.5.0",
+  "version": "4.7.0",
   "description": "sqlReports 4",
   "main": "",
   "scripts": {
@@ -15,5 +15,15 @@
   "bugs": {
     "url": "https://github.com/IronCountySchoolDistrict/sql-reports/issues"
   },
-  "homepage": "https://github.com/IronCountySchoolDistrict/sql-reports#readme"
+  "homepage": "https://github.com/IronCountySchoolDistrict/sql-reports#readme",
+  "dependencies": {
+    "babel": "^6.5.2",
+    "babel-cli": "^6.6.5",
+    "babel-register": "^6.7.2",
+    "gulp": "^3.9.1",
+    "gulp-ps-tasks": "^0.5.2"
+  },
+  "devDependencies": {
+    "babel-preset-es2015": "^6.9.0"
+  }
 }
