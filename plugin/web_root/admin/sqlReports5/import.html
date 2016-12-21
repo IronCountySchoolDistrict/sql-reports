@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html>
+<!-- non framed -->
+<head>
+<title>sqlReports Import</title>
+<script language=javascript>
+function importReport() {
+	var textArray = document.forms[0].elements['xmlText'].value;
+	var first;
+
+	first = textArray.split('<ReportName>');
+	first = first[1].split('</ReportName>'); 
+	$j('#rptname').val(first[0]);
+
+	first = textArray.split('<ReportTitle>');
+	first = first[1].split('</ReportTitle>'); 
+	$j('#rpttitle').val(first[0]);
+
+	first = textArray.split('<AfterTitle>');
+	first = first[1].split('</AfterTitle>'); 
+	$j('#AddAfterTitle').val(first[0]);
+
+	first = textArray.split('<ReportGroup>');
+	first = first[1].split('</ReportGroup>'); 
+	$j('#RptGroup').val(first[0]);
+
+	first = textArray.split('<ReportDescription>');
+	first = first[1].split('</ReportDescription>'); 
+    // added code to avoid nb space.  Possible ssue with gt/lt symbols.
+	if (first[0]=='&nbsp;') {
+	     $j('#RptDescr').val('');
+	} else {
+		if (first[0].match('.*<textarea.*')!=null) {
+                        reptdescr = first[0];
+                        reptdescr = reptdescr.substring(reptdescr.indexOf(">") + 1);
+			reptdescr = reptdescr.replace(/<\/textarea>/g,'');
+			reptdescr = reptdescr.replace(/&lt;/g,'<');
+			reptdescr = reptdescr.replace(/&gt;/g,'>');
+	    $j('#RptDescr').val(reptdescr);			
+		} else {
+	    $j('#RptDescr').val(first[0]); };
+	}
+
+	first = textArray.split('<SQLQuery>');
+	first = first[1].split('</SQLQuery>'); 
+	// added code to avoid nb space.  Issue with gt/lt symbols in the sqlquery.
+	if (first[0]=='&nbsp;') {
+	        $j('#ValueT').val('');
+	} else {
+		if (first[0].match('.*<textarea.*')!=null) {
+                        sqlStatement = first[0];
+                        sqlStatement = sqlStatement.substring(sqlStatement.indexOf(">") + 1);
+			sqlStatement = sqlStatement.replace(/<\/textarea>/g,'');
+			sqlStatement = sqlStatement.replace(/&lt;/g,'<');
+			sqlStatement = sqlStatement.replace(/&gt;/g,'>');
+	        $j('#ValueT').val(sqlStatement);			
+		} else {
+	        $j('#ValueT').val(first[0]); };
+	}
+
+	first = textArray.split('<ReportHeader>');
+	first = first[1].split('</ReportHeader>');
+	// added code to avoid nb space.  Issue with gt/lt symbols in the header.
+	if(first[0]=='&nbsp;'){
+    	    $j('#ValueT2').val('');
+	} else {
+	    $j('#ValueT2').val(first[0]);
+	}
+
+	first = textArray.split('<CreateStudentSelection>');
+	first = first[1].split('</CreateStudentSelection>'); 
+	$j('#ValueLi2').val(first[0]);
+
+	first = textArray.split('<StudentSelectionQuery>');
+	first = first[1].split('</StudentSelectionQuery>');
+	$j('#StudentSel').val(first[0]); 
+
+	first = textArray.split('<CreateStudentSelectionB>');
+	first = first[1].split('</CreateStudentSelectionB>'); 
+	$j('#ValueSSB').val(first[0]);
+
+	first = textArray.split('<IncludeRowNumber>');
+	first = first[1].split('</IncludeRowNumber>'); 
+	$j('#ValueLi4').val(first[0]);
+
+	first = textArray.split('<OpeninNewWindow>');
+	first = first[1].split('</OpeninNewWindow>');
+	$j('#ValueLi').val(first[0]); 
+
+	first = textArray.split('<HideCopyButton>');
+	first = first[1].split('</HideCopyButton>'); 
+	$j('#HideCopy').val(first[0]);
+
+	first = textArray.split('<HideCSVButton>');
+	first = first[1].split('</HideCSVButton>'); 
+	$j('#HideCSV').val(first[0]);
+
+	first = textArray.split('<HideTabButton>');
+	first = first[1].split('</HideTabButton>'); 
+	$j('#HideTab').val(first[0]);
+
+	first = textArray.split('<HidePDFButton>');
+	first = first[1].split('</HidePDFButton>'); 
+	$j('#HidePDF').val(first[0]);
+
+	first = textArray.split('<ShowSearchBox>');
+	first = first[1].split('</ShowSearchBox>'); 
+	$j('#ShowSearchBox').val(first[0]);
+
+	first = textArray.split('<ShowResultsInfo>');
+	first = first[1].split('</ShowResultsInfo>'); 
+	$j('#ShowResultsInfo').val(first[0]);
+
+	first = textArray.split('<ParameterName1>');
+	first = first[1].split('</ParameterName1>'); 
+	$j('#ParamName1').val(first[0]);
+
+	first = textArray.split('<ParameterVal1>');
+	first = first[1].split('</ParameterVal1>'); 
+	$j('#ParamVal1').val(first[0]);
+
+	first = textArray.split('<ParameterCal1>');
+	first = first[1].split('</ParameterCal1>'); 
+	$j('#ParamCal1').val(first[0]);
+
+	first = textArray.split('<ParameterOpt1>');
+	first = first[1].split('</ParameterOpt1>'); 
+	$j('#ParamOpt1').val(first[0]);
+
+	first = textArray.split('<ParameterName2>');
+	first = first[1].split('</ParameterName2>'); 
+	$j('#ParamName2').val(first[0]);
+
+	first = textArray.split('<ParameterVal2>');
+	first = first[1].split('</ParameterVal2>');
+	$j('#ParamVal2').val(first[0]); 
+
+	first = textArray.split('<ParameterCal2>');
+	first = first[1].split('</ParameterCal2>'); 
+	$j('#ParamCal2').val(first[0]);
+
+	first = textArray.split('<ParameterOpt2>');
+	first = first[1].split('</ParameterOpt2>'); 
+	$j('#ParamOpt2').val(first[0]);
+
+	first = textArray.split('<ParameterName3>');
+	first = first[1].split('</ParameterName3>'); 
+	$j('#ParamName3').val(first[0]);
+
+	first = textArray.split('<ParameterVal3>');
+	first = first[1].split('</ParameterVal3>'); 
+	$j('#ParamVal3').val(first[0]);
+
+	first = textArray.split('<ParameterCal3>');
+	first = first[1].split('</ParameterCal3>'); 
+	$j('#ParamCal3').val(first[0]);
+
+	first = textArray.split('<ParameterOpt3>');
+	first = first[1].split('</ParameterOpt3>'); 
+	$j('#ParamOpt3').val(first[0]);
+
+	first = textArray.split('<ParameterName4>');
+	first = first[1].split('</ParameterName4>'); 
+	$j('#ParamName4').val(first[0]);
+
+	first = textArray.split('<ParameterVal4>');
+	first = first[1].split('</ParameterVal4>'); 
+	$j('#ParamVal4').val(first[0]);
+
+	first = textArray.split('<ParameterCal4>');
+	first = first[1].split('</ParameterCal4>'); 
+	$j('#ParamCal4').val(first[0]);
+
+	first = textArray.split('<ParameterOpt4>');
+	first = first[1].split('</ParameterOpt4>'); 
+	$j('#ParamOpt4').val(first[0]);
+
+	first = textArray.split('<ParameterName5>');
+	first = first[1].split('</ParameterName5>'); 
+	$j('#ParamName5').val(first[0]);
+
+	first = textArray.split('<ParameterVal5>');
+	first = first[1].split('</ParameterVal5>'); 
+	$j('#ParamVal5').val(first[0]);
+
+	first = textArray.split('<ParameterCal5>');
+	first = first[1].split('</ParameterCal5>'); 
+	$j('#ParamCal5').val(first[0]);
+
+	first = textArray.split('<ParameterOpt5>');
+	first = first[1].split('</ParameterOpt5>');
+	$j('#ParamOpt5').val(first[0]); 
+
+	first = textArray.split('<PdfOrientation>');
+	first = first[1].split('</PdfOrientation>'); 
+	$j('#PdfOrientation').val(first[0]);
+
+	first = textArray.split('<NoCSVQuotes>');
+	first = first[1].split('</NoCSVQuotes>'); 
+	$j('#NoCSVQuotes').val(first[0]);
+
+	first = textArray.split('<NoRowSel>');
+	first = first[1].split('</NoRowSel>'); 
+	$j('#NoRowSel').val(first[0]);
+
+	first = textArray.split('<ShowSHC>');
+	first = first[1].split('</ShowSHC>');
+	$j('#ShowSHC').val(first[0]); 
+
+	first = textArray.split('<UseColRe>');
+	first = first[1].split('</UseColRe>'); 
+	$j('#UseColRe').val(first[0]);
+
+	first = textArray.split('<UseFixHdr>');
+	first = first[1].split('</UseFixHdr>');
+	$j('#UseFixHdr').val(first[0]); 
+
+	first = textArray.split('<HidePrint>');
+	first = first[1].split('</HidePrint>'); 
+	$j('#HidePrint').val(first[0]);
+
+    first = textArray.split('<ReportNotes>');
+    first = first[1].split('</ReportNotes>');
+    // added code to avoid nb space.  Issue with gt/lt symbols in the sqlquery.
+    if (first[0]=='&nbsp;') {
+	$j('#ReportNotes').val('');
+    } else {
+        if (first[0].match('.*<textarea.*')!=null) {
+            RptNotes = first[0];
+            RptNotes = RptNotes.substring(RptNotes.indexOf(">") + 1);
+            RptNotes = RptNotes.replace(/<\/textarea>/g,'');
+            RptNotes = RptNotes.replace(/&lt;/g,'<');
+            RptNotes = RptNotes.replace(/&gt;/g,'>');  
+	$j('#ReportNotes').val(RptNotes);         
+        } else {
+	$j('#ReportNotes').val(first[0]); };
+    }
+
+	first = textArray.split('<UseColFilt>');
+	first = first[1].split('</UseColFilt>'); 
+	$j('#UseColFilt').val(first[0]);
+
+	first = textArray.split('<UseRowGroups>');
+	first = first[1].split('</UseRowGroups>'); 
+	$j('#UseRowGroups').val(first[0]);
+
+	first = textArray.split('<UseRowGroupsOptions>');
+	first = first[1].split('</UseRowGroupsOptions>');
+	$j('#UseRowGroupsOptions').val(first[0]); 
+
+	first = textArray.split('<DisplayRowGroupsCol>');
+	first = first[1].split('</DisplayRowGroupsCol>'); 
+	$j('#DisplayRowGroupsCol').val(first[0]);
+
+	first = textArray.split('<UseRowGroupsCounts>');
+	first = first[1].split('</UseRowGroupsCounts>'); 
+	$j('#UseRowGroupsCounts').val(first[0]);
+
+	first = textArray.split('<sqlChartsReport>');
+	first = first[1].split('</sqlChartsReport>'); 
+	$j('#sqlChartsReport').val(first[0]);
+
+	first = textArray.split('<InitialsqlChart>');
+	first = first[1].split('</InitialsqlChart>'); 
+	$j('#InitialsqlChart').val(first[0]);
+
+	first = textArray.split('<InitialChartName>');
+	first = first[1].split('</InitialChartName>'); 
+	$j('#InitialChartName').val(first[0]);
+
+	first = textArray.split('<RowGroupsDesc>');
+	first = first[1].split('</RowGroupsDesc>'); 
+	$j('#RowGroupsDesc').val(first[0]);
+
+    first = textArray.split('<FLSMapField>');
+    first = first[1].split('</FLSMapField>');
+    // added code to avoid nb space.  Possible ssue with gt/lt symbols.
+    if (first[0]=='&nbsp;') {
+	$j('#FLSMapField').val('');
+    } else {
+        if (first[0].match('.*<textarea.*')!=null) {
+            flsStatement = first[0];
+            flsStatement = flsStatement.substring(flsStatement.indexOf(">") + 1);
+            flsStatement = flsStatement.replace(/<\/textarea>/g,'');
+            flsStatement = flsStatement.replace(/&lt;/g,'<');
+            flsStatement = flsStatement.replace(/&gt;/g,'>');  
+	$j('#FLSMapField').val(flsStatement);         
+        } else {
+	$j('#FLSMapField').val(first[0]); };
+    }
+
+	first = textArray.split('<ExcFrmList>');
+	first = first[1].split('</ExcFrmList>'); 
+	$j('#ExcFrmList').val(first[0]);
+
+	first = textArray.split('<ExecGrp>');
+	first = first[1].split('</ExecGrp>'); 
+	$j('#ExecGrp').val(first[0]);
+
+	first = textArray.split('<ValueLi3>');
+	first = first[1].split('</ValueLi3>'); 
+	$j('#ValueLi3').val(first[0]);
+
+	first = textArray.split('<NoHeaderRow>');
+	first = first[1].split('</NoHeaderRow>'); 
+	$j('#NoHeaderRow').val(first[0]);
+
+	first = textArray.split('<ReportDirections>');
+	first = first[1].split('</ReportDirections>');
+	// added code to avoid nb space.  Issue with gt/lt symbols.
+	if(first[0]=='&nbsp;'){
+    	    $j('#RptDirections').val('');
+	} else {
+	    $j('#RptDirections').val(first[0]);
+	}
+
+	first = textArray.split('<HideParams>');
+	first = first[1].split('</HideParams>'); 
+	$j('#HideParams').val(first[0]);
+
+	first = textArray.split('<ShowGridlines>');
+	first = first[1].split('</ShowGridlines>'); 
+	$j('#ShowGridlines').val(first[0]);
+
+	first = textArray.split('<ValueR>');
+	first = first[1].split('</ValueR>'); 
+	$j('#ValueR').val(first[0]);
+
+}
+</script>
+~[wc:commonscripts]
+<link href="/images/css/screen.css" rel="stylesheet" media="screen">
+<link href="/images/css/print.css" rel="stylesheet" media="print">
+
+</head>
+
+<body>
+
+~[if.~[gpv:lrn]=~(userfrn)]~[setpostvalue:tchrgrp=~([teachers]group)][else]~[setpostvalue:tchrgrp=-1][/if]
+
+~[if.security.inrole=~[displaypref:sqlReportsAdminGrp]]
+
+<form action="home.html?frn=~(userfrn)" method="POST" onsubmit="importReport()">
+
+<input type="hidden" name="[06]name" id="rptname" value="">
+<input type="hidden" name="[06]value" id="rpttitle" value="">
+<input type="hidden" name="[06]AddAfterTitle" id="AddAfterTitle" value="">
+<input type="hidden" name="[06]RptGroup" id="RptGroup" value="">
+<input type="hidden" name="[06]RptDescr" id="RptDescr" value="">
+<input type="hidden" name="[06]ValueT" id="ValueT" value="">
+<input type="hidden" name="[06]ValueT2" id="ValueT2" value="">
+<input type="hidden" name="[06]ValueLi2" id="ValueLi2" value="">
+<input type="hidden" name="[06]StudentSel" id="StudentSel" value="">
+<input type="hidden" name="[06]ValueSSB" id="ValueSSB" value="">
+<input type="hidden" name="[06]ValueLi4" id="ValueLi4" value="">
+<input type="hidden" name="[06]ValueLi" id="ValueLi" value="">
+<input type="hidden" name="[06]HideCopy" id="HideCopy" value="">
+<input type="hidden" name="[06]HideCSV" id="HideCSV" value="">
+<input type="hidden" name="[06]HideTab" id="HideTab" value="">
+<input type="hidden" name="[06]HidePDF" id="HidePDF" value="">
+<input type="hidden" name="[06]ShowSearchBox" id="ShowSearchBox" value="">
+<input type="hidden" name="[06]ShowResultsInfo" id="ShowResultsInfo" value="">
+<input type="hidden" name="[06]ParamName1" id="ParamName1" value="">
+<input type="hidden" name="[06]ParamVal1" id="ParamVal1" value="">
+<input type="hidden" name="[06]ParamCal1" id="ParamCal1" value="">
+<input type="hidden" name="[06]ParamOpt1" id="ParamOpt1" value="">
+<input type="hidden" name="[06]ParamName2" id="ParamName2" value="">
+<input type="hidden" name="[06]ParamVal2" id="ParamVal2" value="">
+<input type="hidden" name="[06]ParamCal2" id="ParamCal2" value="">
+<input type="hidden" name="[06]ParamOpt2" id="ParamOpt2" value="">
+<input type="hidden" name="[06]ParamName3" id="ParamName3" value="">
+<input type="hidden" name="[06]ParamVal3" id="ParamVal3" value="">
+<input type="hidden" name="[06]ParamCal3" id="ParamCal3" value="">
+<input type="hidden" name="[06]ParamOpt3" id="ParamOpt3" value="">
+<input type="hidden" name="[06]ParamName4" id="ParamName4" value="">
+<input type="hidden" name="[06]ParamVal4" id="ParamVal4" value="">
+<input type="hidden" name="[06]ParamCal4" id="ParamCal4" value="">
+<input type="hidden" name="[06]ParamOpt4" id="ParamOpt4" value="">
+<input type="hidden" name="[06]ParamName5" id="ParamName5" value="">
+<input type="hidden" name="[06]ParamVal5" id="ParamVal5" value="">
+<input type="hidden" name="[06]ParamCal5" id="ParamCal5" value="">
+<input type="hidden" name="[06]ParamOpt5" id="ParamOpt5" value="">
+<input type="hidden" name="[06]PdfOrientation" id="PdfOrientation" value="">
+<input type="hidden" name="[06]NoCSVQuotes" id="NoCSVQuotes" value="">
+<input type="hidden" name="[06]NoRowSel" id="NoRowSel" value="">
+<input type="hidden" name="[06]ShowSHC" id="ShowSHC" value="">
+<input type="hidden" name="[06]UseColRe" id="UseColRe" value="">
+<input type="hidden" name="[06]UseFixHdr" id="UseFixHdr" value="">
+<input type="hidden" name="[06]HidePrint" id="HidePrint" value="">
+<input type="hidden" name="[06]ReportNotes" id="ReportNotes" value="">
+<input type="hidden" name="[06]UseColFilt" id="UseColFilt" value="">
+<input type="hidden" name="[06]UseRowGroups" id="UseRowGroups" value="">
+<input type="hidden" name="[06]UseRowGroupsOptions" id="UseRowGroupsOptions" value="">
+<input type="hidden" name="[06]DisplayRowGroupsCol" id="DisplayRowGroupsCol" value="">
+<input type="hidden" name="[06]UseRowGroupsCounts" id="UseRowGroupsCounts" value="">
+<input type="hidden" name="[06]sqlChartsReport" id="sqlChartsReport" value="">
+<input type="hidden" name="[06]InitialsqlChart" id="InitialsqlChart" value="">
+<input type="hidden" name="[06]InitialChartName" id="InitialChartName" value="">
+<input type="hidden" name="[06]RowGroupsDesc" id="RowGroupsDesc" value="">
+<input type="hidden" name="[06]FLSMapField" id="FLSMapField" value="">
+<input type="hidden" name="[06]ExcFrmList" id="ExcFrmList" value="">
+<input type="hidden" name="[06]ExecGrp" id="ExecGrp" value="">
+<input type="hidden" name="[06]ValueLi3" id="ValueLi3" value="">
+<input type="hidden" name="[06]NoHeaderRow" id="NoHeaderRow" value="">
+<input type="hidden" name="[06]RptDirections" id="RptDirections" value="">
+<input type="hidden" name="[06]HideParams" id="HideParams" value="">
+<input type="hidden" name="[06]ShowGridlines" id="ShowGridlines" value="">
+<input type="hidden" name="[06]ValueR" id="ValueR" value="">
+
+~[wc:admin_header_css]<!-- breadcrumb start --><a href="/admin/home.html" target="_top">Start Page</a> &gt; <a href="home.html?frn=~(userfrn)">sqlReports</a> &gt; sqlReports Import <!-- breadcrumb end -->~[wc:admin_navigation_css]
+
+<!-- start of title -->
+<h1>Import sqlReport</h1>
+<!-- end of title -->
+
+<!-- start bounding box -->
+<div class="box-round">
+
+<!-- start content -->
+<table border="0" cellspacing="0" cellpadding="4">
+<tr bgcolor="#f6f6f6">
+<td class="bold">Copy and paste the contents of the exported xml file below.<br>BE SURE YOUR FILE IS IN THE SQLREPORTS LAYOUT - CLICK <a href="javascript:helpwindow('importguide.html')">HERE</a> FOR THE PROPER LAYOUT.</td>
+<td class="bold" align="right"><a href="javascript:helpwindow('help.html#importing')">sqlReports Help</a></td>
+</tr>
+<tr class="~[evenoddrow]">
+<td colspan=2><textarea name="xmlText" rows="40" cols="100"></textarea></td>
+</tr>
+</table>
+<br>
+<!-- end content -->
+
+<!-- start button row -->
+<div class="button-row">
+<input type="hidden" name="ac" value="prim"><input type="hidden" name="[06]cat" value="sqlReports"><input type="hidden" name="[06]CreatedBy" value="Imported on ~[short.date] at ~[time] by ~[x:username;firstlast]">~[submitbutton]
+</div>
+<!-- end button row -->
+
+[else]
+~[redirect:/admin/sqlReports5/home.html?frn=~(userfrn)]
+[/if]
+
+</div>
+<br>
+<!-- end bounding box -->
+<div align=center><p class="disclaimer noprint" style="text-align:center; font-size:10px">sqlReports 5 (v. 1.0.0).   &copy; 2013 - present day, SIS Resources.  All rights reserved.</p></div>
+~[wc:admin_footer_css]
+</form>
+
+
+</body>
+</html><!-- non framed -->

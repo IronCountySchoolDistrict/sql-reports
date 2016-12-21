@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html>
+<!-- non framed -->
+<head>
+<title>Run sqlReport</title>
+~[wc:commonscripts]
+<link href="/images/css/screen.css" rel="stylesheet" media="screen">
+<link href="/images/css/print.css" rel="stylesheet" media="print">
+
+<!-- Required chart related js files -->
+<script src="/flash/FusionCharts.js" type="text/javascript"></script>
+
+<script language="javascript">
+	function insertParameters () {
+		document.forms[0].elements['~(JSFieldParam;[06]Value2)'].value="~[x:username] - ~[short.date] ~[time]";
+
+		var sQuery = document.forms[0].elements['sqlQuery'].value;
+		sQuery = sQuery.replace(/%param1%/g,document.forms[0].elements['~(JSFieldParam;[06]ParamVal1)'].value);	
+		sQuery = sQuery.replace(/%param2%/g,document.forms[0].elements['~(JSFieldParam;[06]ParamVal2)'].value);	
+		sQuery = sQuery.replace(/%param3%/g,document.forms[0].elements['~(JSFieldParam;[06]ParamVal3)'].value);	
+		sQuery = sQuery.replace(/%param4%/g,document.forms[0].elements['~(JSFieldParam;[06]ParamVal4)'].value);	
+		sQuery = sQuery.replace(/%param5%/g,document.forms[0].elements['~(JSFieldParam;[06]ParamVal5)'].value);
+		document.forms[0].elements['sqlQuery'].value = sQuery;
+
+		var sSelect = document.forms[0].elements['sqlSelect'].value;
+		sSelect = sSelect.replace(/%param1%/g,document.forms[0].elements['~(JSFieldParam;[06]ParamVal1)'].value);	
+		sSelect = sSelect.replace(/%param2%/g,document.forms[0].elements['~(JSFieldParam;[06]ParamVal2)'].value);	
+		sSelect = sSelect.replace(/%param3%/g,document.forms[0].elements['~(JSFieldParam;[06]ParamVal3)'].value);	
+		sSelect = sSelect.replace(/%param4%/g,document.forms[0].elements['~(JSFieldParam;[06]ParamVal4)'].value);	
+		sSelect = sSelect.replace(/%param5%/g,document.forms[0].elements['~(JSFieldParam;[06]ParamVal5)'].value);
+		document.forms[0].elements['sqlSelect'].value = sSelect;
+
+	// code to grab the Param1 drop-down value
+
+~[if#P1PV.~([06]ParamOpt1)=]
+document.forms[0].elements['~(JSFieldParam;[06]P1PassedValue)'].value = document.forms[0].elements['~(JSFieldParam;[06]ParamVal1)'].value;
+[else#P1PV]
+P1Select = document.getElementById("Param1");
+document.forms[0].elements['~(JSFieldParam;[06]P1PassedValue)'].value = P1Select.options[P1Select.selectedIndex].text;
+[/if#P1PV]
+
+
+		// version 2 code to dynamically build the tlist sql
+		// find the number of columns in the sql query
+		var textArray = document.forms[0].elements['~(JSFieldParam;[06]ValueT)'].value;
+
+		var numberOfParts = 0;
+		numberOfParts = textArray.length - 1;
+
+		var indexCount = 0;
+		var parenCnt = 0;
+		var selectWord = "";
+		var selectCnt = 0;
+		var fromWord = "";
+		var fromCnt = 0;
+		var totalColumns = 0;
+                var Xexpr="";
+                var extExpr=0;
+
+		while (indexCount <= numberOfParts)
+		{
+			if (textArray.substr(indexCount,1) == "("){parenCnt++;}
+			if (textArray.substr(indexCount,1) == ")"){parenCnt--;}
+			if (indexCount >= 5 && fromCnt == 0)
+			{
+				selectWord = textArray.substr(indexCount-6,1)+textArray.substr(indexCount-5,1)+textArray.substr(indexCount-4,1)+textArray.substr(indexCount-3,1)+textArray.substr(indexCount-2,1)+textArray.substr(indexCount-1,1);
+				selectWord = selectWord.toUpperCase();
+
+    fromWord = textArray.substr(indexCount,1)+textArray.substr(indexCount+1,1)+textArray.substr(indexCount+2,1)+textArray.substr(indexCount+3,1)+textArray.substr(indexCount+4,1)+textArray.substr(indexCount+5,1);
+				fromWord = fromWord.toUpperCase();
+
+// code by Bob McGregor to allow mulitple WITHs
+withClause = textArray.substr(indexCount,numberOfParts);
+if (withClause.search(/^([\s,]\w+\s+as\s+\()/i) == 0) {
+totalColumns--;
+}
+
+			}
+			if (selectWord == "SELECT" && parenCnt == 0 && selectCnt == 0)
+			{
+				selectCnt = 1;	// allow only one SELECT command to be tagged
+			}
+
+    if (fromWord.search(/[\s\t\n]+FROM[\s\t\n]/) == 0 && parenCnt == 0 && fromCnt == 0)
+			{
+				fromCnt = 1;	// allow only one FROM command to be tagged; once FROM tagged, no more commas are tagged
+				totalColumns++;
+			}
+
+			if (textArray.substr(indexCount,1) == ',' && parenCnt == 0 && fromCnt == 0)
+			{
+				totalColumns++;
+                                isExternal=textArray.substr(indexCount-18,18);
+                                if (isExternal.toUpperCase() == 'EXTERNALEXPRESSION') extExpr=totalColumns;
+			}
+			indexCount++;
+		}
+
+
+		var sT = "sqlReports";
+		var sFrontDelim = "<td>";
+		var sMidDelim = "";
+		var sRearDelim = "</td>";
+		var sColumns = ""
+
+		// dynamically build the list of columns for the tlist sql command
+		if (textArray.search("<td>") > 0)  // this is to handle prior versions
+		{
+			sColumns = sT + "(1)";
+		}
+		else  // this handles v2
+		{
+			indexCount = 1;
+			while (indexCount <= totalColumns)
+			{
+                                if (extExpr==indexCount) {Xexpr=';t;externalExpression'} else {Xexpr=''};
+                            sColumns = sColumns + sFrontDelim + sT + "(" + indexCount + Xexpr + ")" + sRearDelim;
+				indexCount++;
+			}
+		}
+
+		~[if.~([06]ValueLi4;-)=1]sColumns = '<td>'+sT+'(count;-)</td>'+sColumns[/if]
+
+		var sOutput = document.forms[0].elements['sqlOutput'].value;
+		sQuery = sQuery.replace(/~/g,sT);
+		sOutput = sT+'[tlist_sql;'+sQuery+';literalcolumnchecks;~([06]FLSMapField);nonemessage=No Records Found.]<tr>'+sColumns+'</tr>[/tlist_sql]';
+		document.forms[0].elements['sqlOutput'].value = sOutput;
+		document.forms[0].elements['sqlChartQuery'].value = sQuery;
+// end of version 2
+
+	}
+   window.onload = initWindow;
+</script>
+
+</head>
+
+<body>
+
+~[if#pagechk1.~[gpv:lrn]=~(userfrn)]~[setpostvalue:tchrgrp=~([teachers]group)][else#pagechk1]~[setpostvalue:ufrn=~(userfrn)]~[redirect:/admin/sqlReports5/home.html?frn=~[gpv:ufrn]][/if#pagechk1]
+
+~[tlist_sql;select id from gen where dcid = substr('~[gpv:frn]',4) and (ps_customfields.getcf('gen',id,'ExcFrmList') is null or ps_customfields.getcf('gen',id,'ExcFrmList') < (case when ~[displaypref:sqlReportsAdminGrp] in (~[x:usersroles]) THEN 2 else 1 end)) AND 1=CASE WHEN ~[displaypref:sqlReportsAdminGrp] in (~[x:usersroles]) THEN 1 WHEN regexp_instr(','||ps_customfields.getcf('gen',id,'ExecGrp'),','||regexp_replace('~[x:usersroles]',',',',|,')||',')>0 THEN 1 WHEN nvl(ps_customfields.getcf('gen',id,'ExecGrp'),'0')='0' THEN 1 ELSE 0 END]~[setpostvalue:pagechk=~(id)][/tlist_sql]
+
+
+~[wc:admin_header_css]<!-- breadcrumb start --><a href="/admin/home.html" target="_top">Start Page</a> &gt; <a href="home.html?frn=~(userfrn)">sqlReports</a> &gt; Run sqlReport <!-- breadcrumb end -->~[wc:admin_navigation_css]
+
+~[if#pagechk2.~[gpv:pagechk]>0]
+
+~[if#chrt.~([06]sqlChartsReport)=1]
+<form action="params.html?frn=~[gpv:frn]&lrn=~[gpv:lrn]" method="POST" onsubmit="insertParameters()">
+[else#chrt]
+~[if#NF.~([06]ValueR)=1]
+<form action="report5.html?frn=~[gpv:frn]" method="POST" onsubmit="insertParameters()" ~[if#nsl.~([06]ValueLi)=1]target="_blank" class="noSubmitLoading"[/if#nsl]>
+[else#NF]
+<form action="report.html?frn=~[gpv:frn]" method="POST" onsubmit="insertParameters()" ~[if#nsl.~([06]ValueLi)=1]target="_blank" class="noSubmitLoading"[/if#nsl]>
+[/if#NF]
+[/if#chrt]
+
+<input type="hidden" name="sqlOutput" value=""> <!-- version 2 -->
+<input type="hidden" name="sqlChartQuery" value=""> 
+
+<input type="hidden" name="sqlQuery" value="~([06]ValueT)">
+<input type="hidden" name="sqlSelect" value="~([06]StudentSel)">
+
+<input type="hidden" name="[06]ValueT" value=""><!-- version 2 -->
+
+<!-- start of title -->
+<h1>Run sqlReport -</h1>
+<!-- end of title -->
+
+<!-- start bounding box -->
+<div class="box-round">
+
+<!-- start content -->
+<table border="0" cellspacing="0" cellpadding="4">
+<tr bgcolor="#f6f6f6">
+<td class="bold">Label</td>
+<td class="bold">Value</td>
+</tr>
+<tr class="~[evenoddrow]">
+<td class="bold">Name</td>
+<td>~([06]Name)</td>
+</tr>
+<tr class="~[evenoddrow]">
+<td class="bold">Description</td>
+<td>~([06]RptDescr)</td>
+</tr>
+<tr class="~[evenoddrow]">
+<td class="bold">Directions</td>
+<td>~([06]RptDirections)</td>
+</tr>
+~[if#PN1.~([06]ParamName1)>a]
+<tr class="~[evenoddrow]">
+<td class="bold">~([06]ParamName1)</td>
+<td>
+~[if#PO1.~([06]ParamOpt1)=]<input type="text" name="[06]ParamVal1" value="" size="50" ~[if#POC1.~([06]ParamCal1)=1] class="psDateWidget"[/if#POC1]>[else#PO1]<select name="[06]ParamVal1" id="Param1">~[x:insertfile;dropdowns/~([06]ParamOpt1).html]</select>[/if#PO1]
+</td>
+</tr>
+[else#PN1]
+<input type="hidden" name="[06]ParamVal1" value="">
+[/if#PN1]
+~[if#PN2.~([06]ParamName2)>a]
+<tr class="~[evenoddrow]">
+<td class="bold">~([06]ParamName2)</td>
+<td>~[if#PO2.~([06]ParamOpt2)=]<input type="text" name="[06]ParamVal2" value="" size="50" ~[if#POC2.~([06]ParamCal2)=1] class="psDateWidget"[/if#POC2]>[else#PO2]<select name="[06]ParamVal2">~[x:insertfile;dropdowns/~([06]ParamOpt2).html]</select>[/if#PO2]
+</td>
+</tr>
+[else#PN2]
+<input type="hidden" name="[06]ParamVal2" value="">
+[/if#PN2]
+~[if#PN3.~([06]ParamName3)>a]
+<tr class="~[evenoddrow]">
+<td class="bold">~([06]ParamName3)</td>
+<td>
+~[if#PO3.~([06]ParamOpt3)=]<input type="text" name="[06]ParamVal3" value="" size="50" ~[if#POC3.~([06]ParamCal3)=1] class="psDateWidget"[/if#POC3]>[else#PO3]<select name="[06]ParamVal3">~[x:insertfile;dropdowns/~([06]ParamOpt3).html]</select>[/if#PO3]
+</td>
+</tr>
+[else#PN3]
+<input type="hidden" name="[06]ParamVal3" value="">
+[/if#PN3]
+~[if#PN4.~([06]ParamName4)>a]
+<tr class="~[evenoddrow]">
+<td class="bold">~([06]ParamName4)</td>
+<td>
+~[if#PO4.~([06]ParamOpt4)=]<input type="text" name="[06]ParamVal4" value="" size="50" ~[if#POC4.~([06]ParamCal4)=1] class="psDateWidget"[/if#POC4]>[else#PO4]<select name="[06]ParamVal4">~[x:insertfile;dropdowns/~([06]ParamOpt4).html]</select>[/if#PO4]
+</td>
+</tr>
+[else#PN4]
+<input type="hidden" name="[06]ParamVal4" value="">
+[/if#PN4]
+~[if#PN5.~([06]ParamName5)>a]
+<tr class="~[evenoddrow]">
+<td class="bold">~([06]ParamName5)</td>
+<td>
+~[if#PO5.~([06]ParamOpt5)=]<input type="text" name="[06]ParamVal5" value="" size="50" ~[if#POC5.~([06]ParamCal5)=1] class="psDateWidget"[/if#POC5]>[else#PO5]<select name="[06]ParamVal5">~[x:insertfile;dropdowns/~([06]ParamOpt5).html]</select>[/if#PO5]
+</td>
+</tr>
+[else#PN5]
+<input type="hidden" name="[06]ParamVal5" value="">
+[/if#PN5]
+</table>
+<br>
+<!-- end content -->
+
+~[if#chrtoutput.~([06]sqlChartsReport)=1]
+<h2>Chart Setup / Output</h2>
+<table border="0" cellspacing="0" cellpadding="4">
+~[if#dbg.~([06]ValueLi3)=1]<tr><td colspan=4>Debug Info: ~[gpv:sqlChartQuery;;replace=sqlReports,ascii(126)]</td></tr>[/if#dbg]
+<tr class="~[evenoddrow;reset]">
+<td class="bold" colspan="4">Chart Type<select name="charttype">
+<option value="~([06]InitialsqlChart)">~([06]InitialChartName)</option>
+<option value="">-------------------</option>
+<option value="Area2D" ~[if.~[gpv:charttype]=Area2D]selected[/if]>Area</option>
+<option value="Bar2D" ~[if.~[gpv:charttype]=Bar2D]selected[/if]>Bar
+<option value="Column2D" ~[if.~[gpv:charttype]=Column2D]selected[/if]>Column 2D
+<option value="Column3D" ~[if.~[gpv:charttype]=Column3D]selected[/if]>Column 3D</option>
+<option value="Doughnut2D" ~[if.~[gpv:charttype]=Doughnut2D]selected[/if]>Doughnut 2D</option>
+<option value="Doughnut3D" ~[if.~[gpv:charttype]=Doughnut3D]selected[/if]>Doughnut 3D</option>
+<option value="Line" ~[if.~[gpv:charttype]=Line]selected[/if]>Line
+<option value="Pareto2D" ~[if.~[gpv:charttype]=Pareto2D]selected[/if]>Pareto 2D</option>
+<option value="Pareto3D" ~[if.~[gpv:charttype]=Pareto3D]selected[/if]>Pareto 3D</option>
+<option value="Pie2D" ~[if.~[gpv:charttype]=Pie2D]selected[/if]>Pie 2D
+<option value="Pie3D" ~[if.~[gpv:charttype]=Pie3D]selected[/if]>Pie 3D</option>
+</select>
+&nbsp;&nbsp;
+X Axis Label&nbsp;<input type="text" name="chartxaxis" value="~[gpv:chartxaxis]" size="36">
+&nbsp;&nbsp;
+Y Axis Label&nbsp;<input type="text" name="chartyaxis" value="~[gpv:chartyaxis]" size="36"></td>
+</tr>
+~[if#nochrt.~[gpv:charttype]=]<tr><td align="center" colspan="4">Your Chart Will Appear Below</td></tr>[/if#nochrt]
+<tr><td>&nbsp;</td></tr>
+</table>
+
+<!-- end content -->
+
+
+~[if#chk4chrt.~[gpv:charttype]=][else#chk4chrt]
+<!-- Start of chart -->
+   <div id="chartdiv" style="width:600px; height:400px; margin: 0 auto; position: relative;">Chart Appears Here</div>
+   <script type="text/javascript">
+ FusionCharts.printManager.enabled(true);
+      var myChart = new FusionCharts("/flash/~[gpv:charttype].swf", "myChartId");
+      myChart.setDataXML("<graph caption='~([06]Value)' ~[if#aat.~([06]AddAfterTitle)>a]subcaption='~([06]P1PassedValue)'[/if#aat] xAxisName='~[gpv:chartxaxis]' yAxisName='~[gpv:chartyaxis]' showNames='1' decimalPrecision='0' formatNumberScale='0' chartLeftMargin='20' chartRightMargin='30' showAboutMenuItem='1' aboutMenuItemLabel='sqlReports Home Page' aboutMenuItemLink='n-http://www.sisresources.com/'>~[tlist_sql;~[gpv:sqlChartQuery;;replace=sqlReports,ascii(126)]]<set label='~(1)' value='~(2)'/>[/tlist_sql]</graph>");
+      
+      myChart.render("chartdiv");
+   </script>
+
+<div align=center><br /><br /><p class="disclaimer" style="text-align:center; font-size:10px">sqlCharts Lite 1.0 - &copy; SIS Resources - All rights reserved.</p></div>
+
+<!-- End of chart -->
+
+[/if#chk4chrt]
+
+[/if#chrtoutput]
+
+
+
+<!-- start button row -->
+<div class="button-row">
+<input type="hidden" name="ac" value="prim"><input type="hidden" name="[06]Value2" value=""><input type="hidden" name="[06]P1PassedValue" value="">
+~[submitbutton]
+</div>
+<!-- end button row -->
+
+[else#pagechk2]
+~[redirect:/admin/sqlReports5/home.html?frn=~(userfrn)]
+[/if#pagechk2]
+
+</div>
+<br>
+<!-- end bounding box -->
+<div align=center><p class="disclaimer noprint" style="text-align:center; font-size:10px">sqlReports 5 (v. 1.0.0).   &copy; 2013 - present day, SIS Resources.  All rights reserved.</p></div>
+~[wc:admin_footer_css]
+</form>
+
+</body>
+</html><!-- non framed -->

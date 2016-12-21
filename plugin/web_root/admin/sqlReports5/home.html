@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<!-- non framed -->
+<head>
+<title>sqlReports</title>
+~[wc:commonscripts]
+<script language="JavaScript" src="/admin/javascript/ajaxuservar.js"></script>
+<script language="JavaScript" src="/admin/javascript/hierarchical.js"></script>
+
+<link href="/images/css/screen.css" rel="stylesheet" media="screen">
+<link href="/images/css/print.css" rel="stylesheet" media="print">
+</head>
+
+~[if#pagechk.~[gpv:frn]=~(userfrn)][else#pagechk]~[setpostvalue:ufrn=~(userfrn)]~[redirect:/admin/sqlReports5/home.html?frn=~[gpv:ufrn]][/if#pagechk]
+
+<body onload="setinitialstate('sqlReports',2,'sqlReports');collapseall('sqlReports')" onunload="storestate('sqlReports','sqlReports')">
+
+~[wc:admin_header_css]<!-- breadcrumb start --><a href="/admin/home.html" target="_top">Start Page</a> &gt; sqlReports<!-- breadcrumb end -->~[wc:admin_navigation_css]
+
+<!-- start of title and tabs -->
+<h1>sqlReports</h1>~[SetPostValue:repType=sqlReports5]
+~[x:insertfile;/admin/reports/reporttabs.html]
+<!-- end of title and tabs -->
+
+<!-- start bounding box -->
+<div class="box-round">
+
+<!-- start content -->
+<table border="0" cellspacing="0" cellpadding="4" width="100%" id="sqlReports">
+~[if.pref.sqlReportsAdminGrp=]
+<tr class="~[evenoddrow]">
+	<td colspan="4"><a href="prefs.html"><img src="/images/error.png" border="0" alt="Assign preferred admin security group" title="Assign preferred admin security group" align="absmiddle"> Assign preferred admin security group</a></td>
+</tr>
+[/if]
+<!-- add Functions for admin group -->
+~[if.security.inrole=~[displaypref:sqlReportsAdminGrp]]
+<p align="center"><a href="edit.html?frn=006-99&lrn=~[gpv:frn]">Create a new sqlReport</a>&nbsp;&nbsp;-&nbsp;&nbsp;<a href="import.html?frn=006-99&lrn=~[gpv:frn]">Import a new sqlReport</a></p>
+[/if]
+<tr class="~[evenoddrow]">
+<td colspan="4" align="center"><a href="javascript:expandall('sqlReports');">Expand All</a> &nbsp; <a href="javascript:collapseall('sqlReports');">Collapse All</a></td>
+</tr>
+
+<tr bgcolor="#f6f6f6">
+	<td class="bold">Report</td>
+	<td class="bold" colspan="3">Title</td>
+</tr>
+<!-- if the reports have a group, create group line item and subsequent report lines. -->
+~[tlist_sql;
+select rptCode from 
+(select '<tr valign="baseline" class="hiddenRow level_1 hidecount_1 nochildren"><td><img src=/images/listblank.gif height="11" width="28" alt="" border="0"><a href="params.html?frn=006'||g1.dcid||'&lrn=~[gpv:frn]" title="'||ps_customfields.getcf('gen',g1.id,'RptDescr')||'">'||g1.name||'</a></td><td>'||g1.value||'</td><td align="right">'||case when g1.ValueR='1' then '<img src=/images/icon-html.gif height="16" width="16" border="0" alt="Non-Flash" title="Non-Flash"> ' end||case when ps_customfields.getcf('gen',g1.id,'sqlChartsReport')='1' then '<img src=/images/icon-credits.gif height="16" width="16" border="0" alt="sqlCharts" title="sqlCharts"> ' end||case
+when ~[displaypref:sqlReportsAdminGrp] in (~[x:usersroles]) then '<img src=/images/'||CASE WHEN ps_customfields.getcf('gen',g1.id,'ExcFrmList')='1' THEN 'btn_reports_cancel.gif border="0" alt="Exclude ' || name || '" title="Exclude ' || name || '"' ELSE 'misc_trans.gif' END||'>'||'<a href="edit.html?frn=006'||g1.dcid||'&lrn=~[gpv:frn]"><img src=/images/btn_edit.gif border="0" alt="Edit '||g1.name||'" title="Edit '||g1.name||'"></a>'
+end||'</td><td></td></tr>' as rptCode, 
+g1.name as rName, ps_customfields.getcf('gen',g1.id,'RptGroup') as rGroup, 'rpt' as rType from gen g1 
+	where g1.cat='sqlReports' and trim(ps_customfields.getcf('gen',g1.id,'RptGroup')) is not NULL
+and (ps_customfields.getcf('gen',g1.id,'ExcFrmList') is null or ps_customfields.getcf('gen',g1.id,'ExcFrmList') < (case when ~[displaypref:sqlReportsAdminGrp] in (~[x:usersroles]) THEN 2 else 1 end))
+	  AND 1=CASE
+	    WHEN ~[displaypref:sqlReportsAdminGrp] in (~[x:usersroles]) THEN 1	// admins
+		WHEN regexp_instr(','||ps_customfields.getcf('gen',g1.id,'ExecGrp'),','||regexp_replace('~[x:usersroles]',',',',|,')||',')>0 THEN 1
+				// other groups when present
+		WHEN nvl(ps_customfields.getcf('gen',g1.id,'ExecGrp'),'0')='0' THEN 1									// if no groups defined keep it
+		ELSE 0
+		END
+union
+select '<tr id="grp'||ps_customfields.getcf('gen',g2.id,'RptGroup')||'" valign="baseline" class="evenRow level_0 hidecount_0 haschildren isCollapsed"><td colspan="4"><img src=/images/listblank.gif height="11" width="0" alt="" border="0"><a href="javascript'||chr(58)||'toggle(''grp'||ps_customfields.getcf('gen',g2.id,'RptGroup')||''')'||chr(59)||'"><img src=/images/listcollapsed.gif height="11" width="14" alt="+" border="0" id="grp'||ps_customfields.getcf('gen',g2.id,'RptGroup')||'-img"><b>'||ps_customfields.getcf('gen',g2.id,'RptGroup')||'</b></a></td></tr>' as rptCode,
+ps_customfields.getcf('gen',g2.id,'RptGroup') as rName, ps_customfields.getcf('gen',g2.id,'RptGroup') as rGroup, 'hdr' as rType  from gen g2
+	where g2.cat='sqlReports' and trim(ps_customfields.getcf('gen',g2.id,'RptGroup')) is not NULL and (ps_customfields.getcf('gen',g2.id,'ExcFrmList') is null or ps_customfields.getcf('gen',g2.id,'ExcFrmList') < (case when ~[displaypref:sqlReportsAdminGrp] in (~[x:usersroles]) THEN 2 else 1 end)) and (~[displaypref:sqlReportsAdminGrp] in (~[x:usersroles]) or regexp_instr(','||ps_customfields.getcf('gen',g2.id,'ExecGrp'),','||regexp_replace('~[x:usersroles]',',',',|,')||',')>0 or nvl(ps_customfields.getcf('gen',g2.id,'ExecGrp'),'0')='0') )
+order by rGroup, rType, rName;alternatecolor;]
+~(rptCode;t)
+[/tlist_sql]
+<!-- in case there are reports with no group, list them under the grouped reports. -->
+~[tlist_sql;
+select '<tr><td><a href="params.html?frn=006'||g.dcid||'&lrn=~[gpv:frn]" title="'||ps_customfields.getcf('gen',g.id,'RptDescr')||'">'||g.name||'</a></td><td>'||g.value||'</td><td align="right">'||case when g.ValueR='1' then '<img src=/images/icon-html.gif height="16" width="16" border="0" alt="Non-Flash" title="Non-Flash"> ' end||case when ps_customfields.getcf('gen',g.id,'sqlChartsReport')='1' then '<img src=/images/icon-credits.gif height="16" width="16" border="0" alt="sqlCharts" title="sqlCharts"> ' end||case
+when ~[displaypref:sqlReportsAdminGrp] in (~[x:usersroles]) then '<img src=/images/'||CASE WHEN ps_customfields.getcf('gen',g.id,'ExcFrmList')='1' THEN 'btn_reports_cancel.gif border="0" alt="Exclude ' || name || '" title="Exclude ' || name || '"' ELSE 'misc_trans.gif' END||'>'||'<a href="edit.html?frn=006'||g.dcid||'&lrn=~[gpv:frn]"><img src=/images/btn_edit.gif border="0" alt="Edit '||g.name||'" title="Edit '||g.name||'"></a>' end||'</td><td></td></tr>' as rptCode, 
+g.name as rName, ps_customfields.getcf('gen',g.id,'RptGroup') as rGroup, 'rpt' as rType from gen g 
+	where g.cat='sqlReports' and trim(ps_customfields.getcf('gen',g.id,'RptGroup')) is NULL
+and (ps_customfields.getcf('gen',g.id,'ExcFrmList') is null or ps_customfields.getcf('gen',g.id,'ExcFrmList') < (case when ~[displaypref:sqlReportsAdminGrp] in (~[x:usersroles]) THEN 2 else 1 end))
+	  AND 1=CASE
+	    WHEN ~[displaypref:sqlReportsAdminGrp] in (~[x:usersroles]) THEN 1	// admins
+		WHEN regexp_instr(','||ps_customfields.getcf('gen',g.id,'ExecGrp'),','||regexp_replace('~[x:usersroles]',',',',|,')||',')>0 THEN 1	
+				// other groups when present
+		WHEN nvl(ps_customfields.getcf('gen',g.id,'ExecGrp'),'0')='0' THEN 1									// if no groups defined keep it
+		ELSE 0
+		END
+ORDER BY g.name;alternatecolor;]
+~(rptCode;t)
+[/tlist_sql]
+
+<!-- add Functions for admin group -->
+~[if.security.inrole=~[displaypref:sqlReportsAdminGrp]]
+<tr>
+	<td colspan="4">&nbsp;</td>
+</tr>
+<tr bgcolor="#f6f6f6">
+	<td class="bold" colspan="4">Function</td>
+</tr>
+<tr class="~[evenoddrow]">
+	<td colspan="4"><a href="edit.html?frn=006-99&lrn=~[gpv:frn]"><img src="/images/btn_plus.gif" border="0" alt="Create a new sqlReport" title="Create a new sqlReport" align="absmiddle"> Create a new sqlReport</a></td>
+</tr>
+<tr class="~[evenoddrow]">
+	<td colspan="4"><a href="import.html?frn=006-99&lrn=~[gpv:frn]"><img src="/images/btn_reports_rerun.gif" border="0" alt="Import a new sqlReport" title="Import a new sqlReport" align="absmiddle"> Import a new sqlReport</a></td>
+</tr>
+<tr class="~[evenoddrow]">
+	<td colspan="4"><a href="prefs.html"><img src="/images/error.png" border="0" alt="Configure sqlReports preferences" title="Configure sqlReports preferences" align="absmiddle"> Configure sqlReports preferences</a></td>
+</tr>
+[/if]
+
+</table>
+<br>
+<!-- end content -->
+
+</div>
+<br>
+<!-- end bounding box -->
+<div align=center><p class="disclaimer noprint" style="text-align:center; font-size:10px">sqlReports 5 (v. 1.0.0).   &copy; 2013 - present day, SIS Resources.  All rights reserved.</p></div>
+~[wc:admin_footer_css]
+
+</body>
+</html><!-- non framed -->

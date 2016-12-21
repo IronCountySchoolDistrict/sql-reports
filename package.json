@@ -1,7 +1,7 @@
 {
   "name": "sql-reports",
-  "version": "4.7.0",
-  "description": "sqlReports 4",
+  "version": "5.0.0",
+  "description": "sqlReports 5",
   "main": "",
   "scripts": {
     "test": "mocha-casperjs"
@@ -21,7 +21,7 @@
     "babel-cli": "^6.6.5",
     "babel-register": "^6.7.2",
     "gulp": "^3.9.1",
-    "gulp-ps-tasks": "^0.5.2"
+    "gulp-ps-tasks": "^0.6.1"
   },
   "devDependencies": {
     "babel-plugin-transform-es2015-modules-amd": "^6.8.0",

@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<plugin xmlns="http://plugin.powerschool.pearson.com"
+<plugin
+    xmlns="http://plugin.powerschool.pearson.com"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://plugin.powerschool.pearson.com plugin.xsd"
-    description="sqlReports 4"
-    name="sqlReports 4"
-    version="4.7.0">
-
+    description="sqlReports 5 - Admin - Free Version"
+    name="sqlReports 5 - Admin - Free Version"
+    version="1.0.0"
+    xsi:schemaLocation="http://plugin.powerschool.pearson.com plugin.xsd">
+    
     <publisher name="Matt Freund">
         <contact email="matt@sisresources.com"/>
     </publisher>
