@@ -4,7 +4,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     description="sqlReports 5 - Admin - Free Version"
     name="sqlReports 5 - Admin - Free Version"
-    version="1.0.0"
+    version="5.3.0"
     xsi:schemaLocation="http://plugin.powerschool.pearson.com plugin.xsd">
     
     <publisher name="Matt Freund">
