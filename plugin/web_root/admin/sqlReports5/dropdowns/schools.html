@@ -1,2 +1,2 @@
-~[tlist_sql;SELECT school_number, name FROM schools
-where regexp_like(','||school_number||',' ,','|| (select regexp_replace(canchangeschool,chr(59),',|,') from users where dcid=~[x:users_dcid])||',') ORDER BY name] <option value="~(school_number)">~(name)[/tlist_sql]
+~[tlist_sql;select school_number, name from schools where school_number in (with ccs as
+(select DBMS_LOB.SUBSTR(regexp_replace(canchangeschool,chr(59),','),4000,1) schls from users where dcid=~[x:users_dcid]) select regexp_substr(schls,chr(91) || '^,' || chr(93)||'+', 1, level) from ccs connect by regexp_substr(schls, chr(91) || '^,' || chr(93)||'+', 1, level) is not null) order by name] <option value="~(school_number)">~(name)[/tlist_sql]

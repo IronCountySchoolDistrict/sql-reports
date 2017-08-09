@@ -69,15 +69,14 @@ function parseAndTagText() {
 
 	if (numberOfColumns > 0)
 	{
-		alert ("Building identifed " + numberOfColumns + " column(s).")
-
-		indexCnt = 1;
+		if(confirm("Building identifed " + numberOfColumns + " column(s).  Click OK to create default headings or Cancel to return to sqlReports.") == true) 
+		{indexCnt = 1;
 		while (indexCnt <= numberOfColumns)
 		{
 			header = header + "<th>Column" + indexCnt + "</th>";
 			indexCnt++;
 		}
-		document.forms[0].elements['~(JSFieldParam;[06]ValueT2)'].value = header;
+		document.forms[0].elements['~(JSFieldParam;[06]ValueT2)'].value = header; }
 	}
 }
 
@@ -147,10 +146,10 @@ document.forms[0].elements['~(JSFieldParam;[06]InitialChartName)'].value = ICSel
 <form name="form1" action="home.html?frn=~(userfrn)" method="POST" onsubmit="ChartName(),LastUpdated()">  
 
 <!-- start of title -->
-<table><tr><td><h1>Edit sqlReport - ~([06]name)</h1></td><td class="bold" align="right"><a href="javascript:helpwindow('help.html')">sqlReports Help</a></td></tr></table>
+<table><tr><td><h1>~[if#nr.~[gpv:frn]=006-99]Create a New[else#nr]Edit[/if#nr] sqlReport - ~([06]name)</h1></td><td class="bold" align="right"><a href="javascript:helpwindow('help.html')">sqlReports Help</a></td></tr></table>
 <!-- end of title -->
 
-~[if#nr.~[gpv:frn]=006-99]<p>IMPORTANT:  With new reports, only the following items will be saved initially:  Report Name, Report Title, Report Group, Report Description, SQL Query, and Report Header.   Fill any of them out first, click the Submit button, and then edit the report and add the rest of your information.</p><br />[/if#nr]
+~[if#nr.~[gpv:frn]=006-99]<div class="feedback-alert"><p>IMPORTANT:  With new reports, only the following items will be saved initially (all are under the Report tab):  Report Name, Report Title, Report Group, Report Description, SQL Query, and Column Headings.   Fill any of them out first, click the Submit button, and then edit the report and add any other information.</p></div>[/if#nr]
 
 <!-- start bounding box -->
 <div class="box-round">
@@ -213,8 +212,8 @@ document.forms[0].elements['~(JSFieldParam;[06]InitialChartName)'].value = ICSel
 		<td><textarea name="[06]ValueT" id="ValueT" rows="9" cols="70"></textarea></td>
 		</tr>
 		<tr class="~[evenoddrow]">
-		<td class="bold">Report Header<br>
-		<a href="javascript:parseAndTagText()">Build Header</a><br><a href="javascript:replaceTDwithTH()">Converts td's to th's</a>
+		<td class="bold">Column Headings<br>
+		<a href="javascript:parseAndTagText()">Build Headings</a><br><a href="javascript:replaceTDwithTH()">Converts td's to th's</a>
 		</td>
 		<td><textarea name="[06]ValueT2" id="ValueT2" rows="4" cols="70"></textarea></td>
 		</tr>
@@ -235,15 +234,12 @@ document.forms[0].elements['~(JSFieldParam;[06]InitialChartName)'].value = ICSel
 
 <h2 class="toggle collapsed">Important Information Regarding Report Title, Description, SQL Query, and Report Header</h2>
 <table>
-		<tr>
-		<td colspan=2>Do not use double quotes in your Report Title.  Doing so will cause the report to not output correctly because the double quotes will cause html issues on the report output page.  Buttons will not display and row colors will be off.<br><br>If your Report Description starts with a &lt, such as &ltbr&gt, the description will not export.  The same is true for Directions and Notes.  Either avoid using an &lt at the start or if you do use one, after you do the export, copy the report description manually into the export file.  Do the same for Directions and Notes if needed.<br><br>Avoid using the following in the select clause in the SQL Query: double quotes around field aliases (other than externalexpression, aliases are not needed as column names will be added in the Report Header area instead), and reserved characters, such as colon and semi-colon. For a colon use chr(58) and for a semi-colon use chr(59).  If you're concatenating and need a comma, use chr(44) instead.  Also, you can drag the bottom left-hand corner of the input box down to have a bigger box.<br><br>To display the external expression in a report (the external expression is sometimes different than the value in the expression field), add externalexpression as an alias to the expression field in your sql.  For example, if your sql has cc.expression as one of the fields, use cc.expression externalexpression in the sql.  The externalexpression alias will trigger coding in the report to display the external expression instead.<br><br>In the Report Header, make sure you have an adequate number of headings, otherwise your report output will be off.  Do not press enter after any report header - just keep them all on a continuous line.  Pressing enter after any of them will cause white space to appear above the report.  Buttons will not display and row colors will be off.  With Report Headings, there are five class= commands you can use in a &ltth&gt: DCID, DCID DISPLAY, HIDE, NOCF, and ROWGRP.  The DCID ones are explained under the Student Selection tab.  The HIDE command is useful to hide a column needed for the SQL but you don't want to display, or when using the show/hide columns button and you want to hide columns initially that the user can show using the button.  The NOCF command is used when Column Filtering is enabled to remove filtering for a visible column.  The ROWGRP command is used when Row Grouping is enabled and uses the column for row grouping purposes.</td>
-		</tr>
+<tr><td colspan=2>This information has been moved to the sqlReports Help area.  Look for the IMPORTANT paragraphs in the Reports area of sqlReports Help.</td></tr>
 </table>
 <table>
+
 <h2 class="toggle collapsed">Important Information Regarding Field Level Security</h2>
-		<tr>
-		<td colspan=2>Starting with version 4.5, you can add field level security to your reports.  If a person has No Access rights to a field, you can include the field in the report and *'s will appear instead of the actual value on the output.  For it to happen you must have coding in the Field Level Security box, which follows the format of mapfield=column#>table.fieldname.  If there's more than one column, add a comma, and then another column#>table.fieldname.  The column# will be the column number in the Report Header box, and table.fieldname will be replaced by actual table and field names.<br><br>For example, if you have the DOB field from the students table in a report, and in the Report Header box that is column 2, then it would look like mapfield=2>students.dob.  If you also have a reference to the SSN field in the report and that's in column 5, then the full command would be mapfield=2>students.dob,5>students.ssn.<br><br>Clicking on the Build Map Field will create a generic mapfield command which you use as a guide.  You'll need to replace the table.fieldname parts with the actual table and field names (do not use aliases - use the actual names for both), and remove any part of the coding that you do not need.</td>
-		</tr>
+	<tr><td colspan=2>This information has been moved to the sqlReports Help area.  Look for the IMPORTANT paragraphs in the Reports area of sqlReports Help.</td></tr>
 </table>
 
   </div> 
@@ -259,7 +255,7 @@ document.forms[0].elements['~(JSFieldParam;[06]InitialChartName)'].value = ICSel
 		</tr>
         </table>
    <h2>Parameters</h2>
-<div><p>Do not use the following in the 'Name to Display' boxes as they can cause your parameter to not show when running the report: 1) the word Date by itself, 2) a colon at the end of the name, 3) the words studentid or yearid, 4) the equals sign.</p></div>
+<div class="feedback-alert"><p>Do not use the following in the 'Name to Display' boxes as they can cause your parameter to not show when running the report: 1) the word Date by itself, 2) a colon at the end of the name, 3) the words studentid or yearid, 4) the equals sign.</p></div>
 	<table border="0" cellspacing="0" cellpadding="4">
 		<tr bgcolor="#f6f6f6">
 		<td class="bold">Optional Parameters</td>
@@ -301,15 +297,8 @@ document.getElementById("PO5menu").value = "~([06]ParamOpt5)";</script>
 
 <h2 class="toggle collapsed">Important Information Regarding Add <img src="/images/icon-calendar.png">, and Use Drop Down</h2>
 <table>
-<tr>
-<td><u>Add <img src="/images/icon-calendar.png"></u>:<br>If you want a calendar popup to be next to the text  entry box, check this option.  Will be ignored if a drop down is used.</td>
-</tr>
-
-<!-- Added with v4.0 - Drop Down Descriptions-->
-
-~[x:insertfile;dropdowndescriptions.html]
-
-	</table>
+	<tr><td colspan=2>This information has been moved to the sqlReports Help area.  Look for the IMPORTANT paragraphs in the Parameters area of sqlReports Help.</td></tr>
+</table>
 
    </div> 
 
@@ -501,7 +490,7 @@ document.getElementById("PO5menu").value = "~([06]ParamOpt5)";</script>
 		<td>&nbsp;</td>
 		</tr>
 		<tr class="~[evenoddrow]">
-		<td class="bold">Display Column Used for Grouping</td>
+		<td class="bold">Display Column Used for Row Grouping</td>
 		<td align="right"><input type="checkbox" name="[06]DisplayRowGroupsCol" value=""></td>
 		<td>&nbsp;</td>
 		</tr>
@@ -538,18 +527,15 @@ document.getElementById("PO5menu").value = "~([06]ParamOpt5)";</script>
 	</table>
 <h2 class="toggle collapsed">Important Information Regarding Column Filtering and Row Grouping</h2>
 <table>
-		<tr>
-		<td colspan=2>Column Filtering and Row Grouping do not interact well with Show/Hide Columns or Column Reordering.  If you enable either Column Filtering or Row Grouping, then Show/Hide Columns and Column Reordering will be disabled on the output.  Column Filtering needs the search box, so the search box will appear even if it hasn't been checked above.<br><br>Also, Row Grouping causes issues with Option B Student Selection, which is the one that adds the Make Current Selection button.  It will add erroneous information to the dcid values and make the selection incorrect.  If you have Row Grouping enabled, then Option B will be ignored and no Make Current Selection button will appear on the output.</td>
-		</tr>
+	<tr><td colspan=2>This information has been moved to the sqlReports Help area.  Look for the IMPORTANT paragraphs in the Results Page area of sqlReports Help.</td></tr>
 </table>
    </div> 
 
-<div id="tabNotes" >
+
+<div id="tabNotes">
     <h2>Notes - you can use this section to document your report (creation, changes, etc.)</h2>
+<div class="feedback-note"><p>~[if#cb.~([06]CreatedBy)=]Report created / imported prior to 4.5a.[else#cb]~([06]CreatedBy).[/if#cb]~[if#lu.~([06]LastUpdated)=][else#lu]<br />~([06]LastUpdated).[/if#lu]</p></div>
 	<table border="0" cellspacing="0" cellpadding="4">
-		<tr>
-		<td>~[if#cb.~([06]CreatedBy)=]Report created / imported prior to 4.5a.[else#cb]~([06]CreatedBy).[/if#cb]~[if#lu.~([06]LastUpdated)=][else#lu]<br />~([06]LastUpdated).[/if#lu]</td>
-		</tr>
 		<tr>
 		<td><textarea name="[06]ReportNotes" rows="40" cols="90"></textarea></td>
 		</tr>
@@ -575,7 +561,7 @@ document.getElementById("PO5menu").value = "~([06]ParamOpt5)";</script>
 </div>
 <br>
 <!-- end bounding box -->
-<div align=center><p class="disclaimer noprint" style="text-align:center; font-size:10px">sqlReports 5 (v. 1.0.0).   &copy; 2013 - present day, SIS Resources.  All rights reserved.</p></div>
+<div align=center><p class="disclaimer noprint" style="text-align:center; font-size:10px">sqlReports (v. 5.3.0) -  &copy; 2013 - present day, SIS Resources.  All rights reserved.</p></div>
 ~[wc:admin_footer_css]
 </form>
 

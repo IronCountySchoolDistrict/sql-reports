@@ -83,7 +83,7 @@ oTable.api().rows( {page:'current'} ).select();
 	{extend: 'csv', text: 'CSV', titleAttr: 'Be sure to Select Results first.', exportOptions: { rows: { selected: true }, columns: ':visible', modifier: { search: 'applied' }}  ~[if#csv2.~([06]NoCSVQuotes)=1], fieldBoundary: ''[/if#csv2] ~[if#csv3.~([06]NoHeaderRow)=1], header: false[/if#csv3]},
 [/if#csv]
 ~[if#tab.~([06]HideTab)=]
-	{extend: 'csv', text: 'TAB', titleAttr: 'Be sure to Select Results first.', exportOptions: { rows: { selected: true }, columns: ':visible', modifier: { search: 'applied' }}, charset: 'utf8', fieldSeparator: '\t', extension: '.txt' ~[if#tab2.~([06]NoHeaderRow)=1], header: false[/if#tab2]},
+	{extend: 'csv', text: 'TAB', titleAttr: 'Be sure to Select Results first.', exportOptions: { rows: { selected: true }, columns: ':visible', modifier: { search: 'applied' }}, charset: 'utf8', fieldBoundary: '', fieldSeparator: '\t', extension: '.txt' ~[if#tab2.~([06]NoHeaderRow)=1], header: false[/if#tab2]},
 [/if#tab]
 ~[if#print.~([06]HidePrint)=]
 	{extend: 'print', autoPrint: false, text: 'Print', titleAttr: 'Be sure to Select Results first.  The browser print feature works best.', exportOptions: {  rows: { selected: true }, columns: ':visible', modifier: { search: 'applied' }}, message: "~(Value)~[if.~([06]AddAfterTitle)>a] - ~([06]P1PassedValue)[/if]"},
@@ -206,7 +206,7 @@ function displayQuery() {
 
 <style>
 @media print {
-  #header, .dt-buttons, .column-filter-widgets, .dataTables_filter, .dataTables_info {
+  #header, .dt-buttons, .column-filter-widgets, .dataTables_filter, .dataTables_info, .RptParams, .debugInfo {
     display: none; }
 
 .box-round {
@@ -221,7 +221,7 @@ function displayQuery() {
 
 <form id="stform" action="/admin/studentlist/functions.html" method="POST"><input type="hidden" id="studSelectList" name="ac" value="buildsel;table=students;list="><input style="display:none" type="submit" value="Student Functions"  alt="submit"  id="attSubmitButton" /></form>
 
-~[wc:admin_header_css]<!-- breadcrumb start --><a href="/admin/home.html">Start Page</a> &gt; <a href="home.html?frn=~(userfrn)">sqlReports</a> &gt; <a href="params.html?frn=~[gpv:frn]&lrn=~(userfrn)">Run sqlReport</a> &gt; ~(Value)<!-- breadcrumb end -->~[wc:admin_navigation_css]
+~[wc:admin_header_css]<!-- breadcrumb start --><a href="/admin/home.html">Start Page</a> &gt; <a href="home.html?frn=~(userfrn)">sqlReports</a> &gt; <a href="params.html?frn=~[gpv:frn]&lrn=~(userfrn)">Run sqlReport</a> ~[if.security.inrole=~[displaypref:sqlReportsAdminGrp]]| <a href="edit.html?frn=~[gpv:frn]&lrn=~(userfrn)">Edit sqlReport</a>[/if] &gt; ~(Value)<!-- breadcrumb end -->~[wc:admin_navigation_css]
 
 <!-- start of title -->
 <DIV id="sqlReport">
@@ -239,9 +239,10 @@ Parameters - ~[if.~([06]ParamName1)>a]<b>~([06]ParamName1):</b> ~([06]ParamVal1)
 [/if#np1]
 [/if#hp]
 
-~[if.~([06]ValueLi3)=1]
-<p> <b><a href="#" onClick="displayQuery();">SQL Query</a></b><span style="display:none;" id="sqlDisplay"> ~([06]ValueT;replace=[cr],[sp])</span><input type="hidden" id="pVal1" name="[06]ParamVal1" value=""><input type="hidden" id="pVal2" name="[06]ParamVal2" value=""><input type="hidden" id="pVal3" name="[06]ParamVal3" value=""><input type="hidden" id="pVal4" name="[06]ParamVal4" value=""><input type="hidden" id="pVal5" name="[06]ParamVal5" value=""></p>
-[/if]
+~[if.security.inrole=~[displaypref:sqlReportsAdminGrp]]~[if#VL3.~([06]ValueLi3)=1]
+<div class="debugInfo"> <p><b><a href="#" onClick="displayQuery();">Display SQL Query</a></b><span style="display:none;" id="sqlDisplay"> ~([06]ValueT;replace=[cr],[sp])</span><input type="hidden" id="pVal1" name="[06]ParamVal1" value=""><input type="hidden" id="pVal2" name="[06]ParamVal2" value=""><input type="hidden" id="pVal3" name="[06]ParamVal3" value=""><input type="hidden" id="pVal4" name="[06]ParamVal4" value=""><input type="hidden" id="pVal5" name="[06]ParamVal5" value=""></p>
+<p><b><a target="_blank" href="/admin/tech/log/viewsystemlog.html?filename=&maxlines=100&find=ORA-&mode=search">Check System Log for Error Messages</b></a> (opens in a new tab, older errors listed first)</p></div>
+[/if#VL3][/if]
 
 <!-- end of title -->
 
@@ -278,7 +279,7 @@ Parameters - ~[if.~([06]ParamName1)>a]<b>~([06]ParamName1):</b> ~([06]ParamVal1)
 </DIV>
 <br>
 <!-- end bounding box -->
-<div align=center><p class="disclaimer noprint" style="text-align:center; font-size:10px">sqlReports 5 (v. 1.0.0).   &copy; 2013 - present day, SIS Resources.  All rights reserved.</p></div>
+<div align=center><p class="disclaimer noprint" style="text-align:center; font-size:10px">sqlReports (v. 5.3.0) -  &copy; 2013 - present day, SIS Resources.  All rights reserved.</p></div>
 
 </body>
 </html><!-- non framed -->

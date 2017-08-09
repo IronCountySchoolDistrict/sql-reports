@@ -3,9 +3,7 @@ select sec.id, c.course_name, t.abbreviation, sec.course_number||'.'||sec.sectio
 from sectionteacher st
 inner join sections sec on sec.id = st.sectionid
 inner join courses c on upper(c.course_number) = upper(sec.course_number)
-inner join 
-(select t.id id from terms t join (select id id, firstday fd, lastday ld from terms where id = ~(curtermid) and yearid = ~(curyearid) and schoolid = ~(curschoolid)) curterm on 1=1
-where ((t.firstday between curterm.fd and curterm.ld) or (t.lastday between curterm.fd and curterm.ld)) and t.yearid = ~(curyearid) and t.schoolid = ~(curschoolid)) allterms on allterms.id = sec.termid
-inner join terms t on t.id = sec.termid and t.yearid = ~(curyearid) and t.schoolid = ~(curschoolid)
+inner join terms t on sec.termid = t.id and sec.schoolid = t.schoolid 
+inner join terms t2 on t2.schoolid = t.schoolid and t2.id = ~(curtermid) and t2.firstday < t.lastday and t2.lastday > t.firstday
 where st.teacherid = ~[x:userid]
 order by abbreviation, expression, course_name] <option value="~(sec.id)">~(c.course_name)  (~(t.abbreviation) - ~(crssec) - ~(sec.expression;t;externalexpression))[/tlist_sql]
