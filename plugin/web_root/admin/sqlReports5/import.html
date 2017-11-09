@@ -26,7 +26,7 @@ function importReport() {
 
 	first = textArray.split('<ReportDescription>');
 	first = first[1].split('</ReportDescription>'); 
-    // added code to avoid nb space.  Possible ssue with gt/lt symbols.
+    // added code to avoid nb space.  Possible issue with gt/lt symbols.
 	if (first[0]=='&nbsp;') {
 	     $j('#RptDescr').val('');
 	} else {
@@ -306,12 +306,20 @@ function importReport() {
 	$j('#NoHeaderRow').val(first[0]);
 
 	first = textArray.split('<ReportDirections>');
-	first = first[1].split('</ReportDirections>');
-	// added code to avoid nb space.  Issue with gt/lt symbols.
-	if(first[0]=='&nbsp;'){
-    	    $j('#RptDirections').val('');
+	first = first[1].split('</ReportDirections>'); 
+    // added code to avoid nb space.  Possible issue with gt/lt symbols.
+	if (first[0]=='&nbsp;') {
+	     $j('#ReportDirections').val('');
 	} else {
-	    $j('#RptDirections').val(first[0]);
+		if (first[0].match('.*<textarea.*')!=null) {
+                        reptdir = first[0];
+                        reptdir = reptdir.substring(reptdir.indexOf(">") + 1);
+			reptdir = reptdir.replace(/<\/textarea>/g,'');
+			reptdir = reptdir.replace(/&lt;/g,'<');
+			reptdir = reptdir.replace(/&gt;/g,'>');
+	    $j('#ReportDirections').val(reptdir);			
+		} else {
+	    $j('#ReportDirections').val(first[0]); };
 	}
 
 	first = textArray.split('<HideParams>');
@@ -402,7 +410,7 @@ function importReport() {
 <input type="hidden" name="[06]ExecGrp" id="ExecGrp" value="">
 <input type="hidden" name="[06]ValueLi3" id="ValueLi3" value="">
 <input type="hidden" name="[06]NoHeaderRow" id="NoHeaderRow" value="">
-<input type="hidden" name="[06]RptDirections" id="RptDirections" value="">
+<input type="hidden" name="[06]RptDirections" id="ReportDirections" value="">
 <input type="hidden" name="[06]HideParams" id="HideParams" value="">
 <input type="hidden" name="[06]ShowGridlines" id="ShowGridlines" value="">
 <input type="hidden" name="[06]ValueR" id="ValueR" value="">
@@ -442,7 +450,7 @@ function importReport() {
 </div>
 <br>
 <!-- end bounding box -->
-<div align=center><p class="disclaimer noprint" style="text-align:center; font-size:10px">sqlReports 5 (v. 1.0.0).   &copy; 2013 - present day, SIS Resources.  All rights reserved.</p></div>
+<div align=center><p class="disclaimer noprint" style="text-align:center; font-size:10px">sqlReports (v. 5.4.0) -  &copy; 2013 - present day, SIS Resources.  All rights reserved.</p></div>
 ~[wc:admin_footer_css]
 </form>
 

@@ -2,7 +2,7 @@
 ~[if.~([06]value)=]<ReportTitle></ReportTitle>[else]<ReportTitle>~([06]value)</ReportTitle>[/if]
 ~[if.~([06]AddAfterTitle)=]<AfterTitle></AfterTitle>[else]<AfterTitle>~([06]AddAfterTitle)</AfterTitle>[/if]
 ~[if.~([06]RptGroup)=]<ReportGroup></ReportGroup>[else]<ReportGroup>~([06]RptGroup)</ReportGroup>[/if]
-~[if.~([06]RptDescr;nohtml)=]<ReportDescription></ReportDescription>[else]<ReportDescription>~([06]RptDescr)</ReportDescription>[/if]
+<ReportDescription><textarea name="[06]RptDescr"></textarea></ReportDescription>
 <SQLQuery><textarea name="[06]ValueT"></textarea></SQLQuery>
 <ReportHeader>~([06]ValueT2)</ReportHeader>
 ~[if.~([06]ValueLi2)=]<CreateStudentSelection></CreateStudentSelection>[else]<CreateStudentSelection>~([06]ValueLi2)</CreateStudentSelection>[/if]
@@ -43,7 +43,7 @@
 ~[if.~([06]UseColRe)=]<UseColRe></UseColRe>[else]<UseColRe>~([06]UseColRe)</UseColRe>[/if]
 ~[if.~([06]UseFixHdr)=]<UseFixHdr></UseFixHdr>[else]<UseFixHdr>~([06]UseFixHdr)</UseFixHdr>[/if]
 ~[if.~([06]HidePrint)=]<HidePrint></HidePrint>[else]<HidePrint>~([06]HidePrint)</HidePrint>[/if]
-~[if.~([06]ReportNotes;nohtml)=]<ReportNotes></ReportNotes>[else]<ReportNotes>~([06]ReportNotes)</ReportNotes>[/if]
+<ReportNotes><textarea name="[06]ReportNotes"></textarea></ReportNotes>
 ~[if.~([06]UseColFilt)=]<UseColFilt></UseColFilt>[else]<UseColFilt>~([06]UseColFilt)</UseColFilt>[/if]
 ~[if.~([06]UseRowGroups)=]<UseRowGroups></UseRowGroups>[else]<UseRowGroups>~([06]UseRowGroups)</UseRowGroups>[/if]
 ~[if.~([06]UseRowGroupsOptions)=]<UseRowGroupsOptions></UseRowGroupsOptions>[else]<UseRowGroupsOptions>~([06]UseRowGroupsOptions)</UseRowGroupsOptions>[/if]
@@ -58,7 +58,7 @@
 ~[if.~([06]ExecGrp)=]<ExecGrp></ExecGrp>[else]<ExecGrp>~([06]ExecGrp)</ExecGrp>[/if]
 ~[if.~([06]ValueLi3)=]<ValueLi3></ValueLi3>[else]<ValueLi3>~([06]ValueLi3)</ValueLi3>[/if]
 ~[if.~([06]NoHeaderRow)=]<NoHeaderRow></NoHeaderRow>[else]<NoHeaderRow>~([06]NoHeaderRow)</NoHeaderRow>[/if]
-~[if.~([06]RptDirections;nohtml)=]<ReportDirections></ReportDirections>[else]<ReportDirections>~([06]RptDirections)</ReportDirections>[/if]
+<ReportDirections><textarea name="[06]RptDirections"></textarea></ReportDirections>
 ~[if.~([06]HideParams)=]<HideParams></HideParams>[else]<HideParams>~([06]HideParams)</HideParams>[/if]
 ~[if.~([06]ShowGridlines)=]<ShowGridlines></ShowGridlines>[else]<ShowGridlines>~([06]ShowGridlines)</ShowGridlines>[/if]
 ~[if.~([06]ValueR)=]<ValueR></ValueR>[else]<ValueR>~([06]ValueR)</ValueR>[/if]

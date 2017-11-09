@@ -1,0 +1,1 @@
+These are the javascript files from the /flash folder of PowerSchool.  They are being installed here to have the files in this folder and to remove the use of the alternative chart files plugins.

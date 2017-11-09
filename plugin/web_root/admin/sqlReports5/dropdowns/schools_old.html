@@ -1,0 +1,2 @@
+~[tlist_sql;SELECT school_number, name FROM schools
+where regexp_like(','||school_number||',' ,','|| (select regexp_replace(canchangeschool,chr(59),',|,') from users where dcid=~[x:users_dcid])||',') ORDER BY name] <option value="~(school_number)">~(name)[/tlist_sql]

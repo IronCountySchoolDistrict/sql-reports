@@ -8,7 +8,7 @@
 <link href="/images/css/print.css" rel="stylesheet" media="print">
 
 <!-- Required chart related js files -->
-<script src="/flash/FusionCharts.js" type="text/javascript"></script>
+<script src="FusionChartsJS/FusionCharts.js" type="text/javascript"></script>
 
 <script language="javascript">
 	function insertParameters () {
@@ -126,6 +126,8 @@ totalColumns--;
 		sOutput = sT+'[tlist_sql;'+sQuery+';literalcolumnchecks;~([06]FLSMapField);nonemessage=No Records Found.]<tr>'+sColumns+'</tr>[/tlist_sql]';
 		document.forms[0].elements['sqlOutput'].value = sOutput;
 		document.forms[0].elements['sqlChartQuery'].value = sQuery;
+		document.forms[0].elements['NoOfChartCols'].value = totalColumns;
+
 // end of version 2
 
 	}
@@ -146,7 +148,7 @@ totalColumns--;
 ~[if#pagechk2.~[gpv:pagechk]>0]
 
 ~[if#chrt.~([06]sqlChartsReport)=1]
-<form action="params.html?frn=~[gpv:frn]&lrn=~[gpv:lrn]" method="POST" onsubmit="insertParameters()">
+<form action="sqlcharts.html?frn=~[gpv:frn]&lrn=~[gpv:lrn]" method="POST" onsubmit="insertParameters()" ~[if#nsl.~([06]ValueLi)=1]target="_blank" class="noSubmitLoading"[/if#nsl]>
 [else#chrt]
 ~[if#NF.~([06]ValueR)=1]
 <form action="report5.html?frn=~[gpv:frn]" method="POST" onsubmit="insertParameters()" ~[if#nsl.~([06]ValueLi)=1]target="_blank" class="noSubmitLoading"[/if#nsl]>
@@ -155,17 +157,19 @@ totalColumns--;
 [/if#NF]
 [/if#chrt]
 
-<input type="hidden" name="sqlOutput" value=""> <!-- version 2 -->
-<input type="hidden" name="sqlChartQuery" value=""> 
+<input type="hidden" name="sqlOutput" value=""> <input type="hidden" name="sqlChartQuery" value=""> 
+<input type="hidden" name="NoOfChartCols" value="">
 
 <input type="hidden" name="sqlQuery" value="~([06]ValueT)">
 <input type="hidden" name="sqlSelect" value="~([06]StudentSel)">
 
-<input type="hidden" name="[06]ValueT" value=""><!-- version 2 -->
+<input type="hidden" name="[06]ValueT" value="">
 
 <!-- start of title -->
 <h1>Run sqlReport -</h1>
 <!-- end of title -->
+
+~[if.security.pageview=/admin/sqlReports5/params.html]<div class="feedback-alert"><p>You currently only have View rights to this page and will not be able to run this report.  Please check with your PowerSchool system admin on changing the page permissions to allow full access for this page.</p></div>[/if]
 
 <!-- start bounding box -->
 <div class="box-round">
@@ -241,58 +245,6 @@ totalColumns--;
 <br>
 <!-- end content -->
 
-~[if#chrtoutput.~([06]sqlChartsReport)=1]
-<h2>Chart Setup / Output</h2>
-<table border="0" cellspacing="0" cellpadding="4">
-~[if#dbg.~([06]ValueLi3)=1]<tr><td colspan=4>Debug Info: ~[gpv:sqlChartQuery;;replace=sqlReports,ascii(126)]</td></tr>[/if#dbg]
-<tr class="~[evenoddrow;reset]">
-<td class="bold" colspan="4">Chart Type<select name="charttype">
-<option value="~([06]InitialsqlChart)">~([06]InitialChartName)</option>
-<option value="">-------------------</option>
-<option value="Area2D" ~[if.~[gpv:charttype]=Area2D]selected[/if]>Area</option>
-<option value="Bar2D" ~[if.~[gpv:charttype]=Bar2D]selected[/if]>Bar
-<option value="Column2D" ~[if.~[gpv:charttype]=Column2D]selected[/if]>Column 2D
-<option value="Column3D" ~[if.~[gpv:charttype]=Column3D]selected[/if]>Column 3D</option>
-<option value="Doughnut2D" ~[if.~[gpv:charttype]=Doughnut2D]selected[/if]>Doughnut 2D</option>
-<option value="Doughnut3D" ~[if.~[gpv:charttype]=Doughnut3D]selected[/if]>Doughnut 3D</option>
-<option value="Line" ~[if.~[gpv:charttype]=Line]selected[/if]>Line
-<option value="Pareto2D" ~[if.~[gpv:charttype]=Pareto2D]selected[/if]>Pareto 2D</option>
-<option value="Pareto3D" ~[if.~[gpv:charttype]=Pareto3D]selected[/if]>Pareto 3D</option>
-<option value="Pie2D" ~[if.~[gpv:charttype]=Pie2D]selected[/if]>Pie 2D
-<option value="Pie3D" ~[if.~[gpv:charttype]=Pie3D]selected[/if]>Pie 3D</option>
-</select>
-&nbsp;&nbsp;
-X Axis Label&nbsp;<input type="text" name="chartxaxis" value="~[gpv:chartxaxis]" size="36">
-&nbsp;&nbsp;
-Y Axis Label&nbsp;<input type="text" name="chartyaxis" value="~[gpv:chartyaxis]" size="36"></td>
-</tr>
-~[if#nochrt.~[gpv:charttype]=]<tr><td align="center" colspan="4">Your Chart Will Appear Below</td></tr>[/if#nochrt]
-<tr><td>&nbsp;</td></tr>
-</table>
-
-<!-- end content -->
-
-
-~[if#chk4chrt.~[gpv:charttype]=][else#chk4chrt]
-<!-- Start of chart -->
-   <div id="chartdiv" style="width:600px; height:400px; margin: 0 auto; position: relative;">Chart Appears Here</div>
-   <script type="text/javascript">
- FusionCharts.printManager.enabled(true);
-      var myChart = new FusionCharts("/flash/~[gpv:charttype].swf", "myChartId");
-      myChart.setDataXML("<graph caption='~([06]Value)' ~[if#aat.~([06]AddAfterTitle)>a]subcaption='~([06]P1PassedValue)'[/if#aat] xAxisName='~[gpv:chartxaxis]' yAxisName='~[gpv:chartyaxis]' showNames='1' decimalPrecision='0' formatNumberScale='0' chartLeftMargin='20' chartRightMargin='30' showAboutMenuItem='1' aboutMenuItemLabel='sqlReports Home Page' aboutMenuItemLink='n-http://www.sisresources.com/'>~[tlist_sql;~[gpv:sqlChartQuery;;replace=sqlReports,ascii(126)]]<set label='~(1)' value='~(2)'/>[/tlist_sql]</graph>");
-      
-      myChart.render("chartdiv");
-   </script>
-
-<div align=center><br /><br /><p class="disclaimer" style="text-align:center; font-size:10px">sqlCharts Lite 1.0 - &copy; SIS Resources - All rights reserved.</p></div>
-
-<!-- End of chart -->
-
-[/if#chk4chrt]
-
-[/if#chrtoutput]
-
-
 
 <!-- start button row -->
 <div class="button-row">
@@ -308,7 +260,7 @@ Y Axis Label&nbsp;<input type="text" name="chartyaxis" value="~[gpv:chartyaxis]"
 </div>
 <br>
 <!-- end bounding box -->
-<div align=center><p class="disclaimer noprint" style="text-align:center; font-size:10px">sqlReports 5 (v. 1.0.0).   &copy; 2013 - present day, SIS Resources.  All rights reserved.</p></div>
+<div align=center><p class="disclaimer noprint" style="text-align:center; font-size:10px">sqlReports (v. 5.4.0) -  &copy; 2013 - present day, SIS Resources.  All rights reserved.</p></div>
 ~[wc:admin_footer_css]
 </form>
 

@@ -190,13 +190,23 @@ function displayQuery() {
 }
 </style>
 [/if#SG]
+<style>
+@media print {
+  #header, .dt-buttons, .column-filter-widgets, .dataTables_filter, .dataTables_info, .RptParams, .debugInfo {
+    display: none; }
+
+.box-round {
+    border: 0px ;
+  }
+}
+</style>
 </head>
 
 <body>
 
 <form id="stform" action="/admin/studentlist/functions.html" method="POST"><input type="hidden" id="studSelectList" name="ac" value="buildsel;table=students;list="><input style="display:none" type="submit" value="Student Functions"  alt="submit"  id="attSubmitButton" /></form>
 
-~[wc:admin_header_css]<!-- breadcrumb start --><a href="/admin/home.html">Start Page</a> &gt; <a href="home.html?frn=~(userfrn)">sqlReports</a> &gt; <a href="params.html?frn=~[gpv:frn]&lrn=~(userfrn)">Run sqlReport</a> &gt; ~(Value)<!-- breadcrumb end -->~[wc:admin_navigation_css]
+~[wc:admin_header_css]<!-- breadcrumb start --><a href="/admin/home.html">Start Page</a> &gt; <a href="home.html?frn=~(userfrn)">sqlReports</a> &gt; <a href="params.html?frn=~[gpv:frn]&lrn=~(userfrn)">Run sqlReport</a> ~[if.security.inrole=~[displaypref:sqlReportsAdminGrp]]| <a href="edit.html?frn=~[gpv:frn]&lrn=~(userfrn)">Edit sqlReport</a>[/if] &gt; ~(Value)<!-- breadcrumb end -->~[wc:admin_navigation_css]
 
 <!-- start of title -->
 <DIV id="sqlReport">
@@ -214,9 +224,10 @@ Parameters - ~[if.~([06]ParamName1)>a]<b>~([06]ParamName1):</b> ~([06]ParamVal1)
 [/if#np1]
 [/if#hp]
 
-~[if.~([06]ValueLi3)=1]
-<p> <b><a href="#" onClick="displayQuery();">SQL Query</a></b><span style="display:none;" id="sqlDisplay"> ~([06]ValueT;replace=[cr],[sp])</span><input type="hidden" id="pVal1" name="[06]ParamVal1" value=""><input type="hidden" id="pVal2" name="[06]ParamVal2" value=""><input type="hidden" id="pVal3" name="[06]ParamVal3" value=""><input type="hidden" id="pVal4" name="[06]ParamVal4" value=""><input type="hidden" id="pVal5" name="[06]ParamVal5" value=""></p>
-[/if]
+~[if.security.inrole=~[displaypref:sqlReportsAdminGrp]]~[if#VL3.~([06]ValueLi3)=1]
+<div class="debugInfo"> <p><b><a href="#" onClick="displayQuery();">Display SQL Query</a></b><span style="display:none;" id="sqlDisplay"> ~([06]ValueT;replace=[cr],[sp])</span><input type="hidden" id="pVal1" name="[06]ParamVal1" value=""><input type="hidden" id="pVal2" name="[06]ParamVal2" value=""><input type="hidden" id="pVal3" name="[06]ParamVal3" value=""><input type="hidden" id="pVal4" name="[06]ParamVal4" value=""><input type="hidden" id="pVal5" name="[06]ParamVal5" value=""></p>
+<p><b><a target="_blank" href="/admin/tech/log/viewsystemlog.html?filename=&maxlines=100&find=ORA-&mode=search">Check System Log for Error Messages</b></a> (opens in a new tab, older errors listed first)</p></div>
+[/if#VL3][/if]
 
 
 <!-- end of title -->
@@ -230,8 +241,7 @@ Parameters - ~[if.~([06]ParamName1)>a]<b>~([06]ParamName1):</b> ~([06]ParamVal1)
 <!-- header record stored in [gen]valueT2 -->
 <thead>
 <tr bgcolor="#f6f6f6" class="bold">
-	~[if.~([06]ValueLi4)=1]<th>Count</th>[/if]  <!-- dean - v0.92 -->
-	~(ValueT2)
+	~[if.~([06]ValueLi4)=1]<th>Count</th>[/if]  ~(ValueT2)
 </tr>
 </thead>
 <!-- tlist sql built from the paramaters page -->
@@ -240,7 +250,6 @@ Parameters - ~[if.~([06]ParamName1)>a]<b>~([06]ParamName1):</b> ~([06]ParamVal1)
 <br>
 </div>
 ~[if.~([06]ValueLi2)=1]
-<!-- fixed centering issue - Thanks Chris and Oskar! -->
 <p style="text-align:center;" class="noprint"><a href="/admin/studentlist/functions.html?ac=buildsel;table=students;list=
 ~[tlist_sql;~[gpv:sqlSelect;replace=,ascii(32)]]~(line;l),[/tlist_sql]">Original Query Current Selection.</a></p>
 [/if]
@@ -250,7 +259,7 @@ Parameters - ~[if.~([06]ParamName1)>a]<b>~([06]ParamName1):</b> ~([06]ParamVal1)
 </DIV>
 <br>
 <!-- end bounding box -->
-<div align=center><p class="disclaimer noprint" style="text-align:center; font-size:10px">sqlReports 5 (v. 1.0.0).   &copy; 2013 - present day, SIS Resources.  All rights reserved.</p></div>
+<div align=center><p class="disclaimer noprint" style="text-align:center; font-size:10px">sqlReports (v. 5.4.0) -  &copy; 2013 - present day, SIS Resources.  All rights reserved.</p></div>
 ~[wc:admin_footer_css]
 
 </body>

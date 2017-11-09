@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html>
+<!-- non framed -->
+<head>
+<title>~(Value)~[if.~([06]AddAfterTitle)>a] - ~([06]P1PassedValue)[/if]</title>
+
+<script src="sqlReports.js"></script>
+
+			<style type="text/css" title="currentStyle">
+			@import "DataTables5/media/css/sqlReports5.dataTables.css";
+			@import "DataTables5/extensions/Buttons/css/buttons.dataTables.css";
+			@import "DataTables5/extensions/FixedHeader/css/fixedHeader.dataTables.min.css";
+			@import "DataTables5/extensions/ColumnFilter/css/ColumnFilterWidgets.css";
+		</style>
+
+
+		<script type="text/javascript" language="javascript" src="DataTables5/media/js/jquery.js"></script>
+		<script type="text/javascript" language="javascript" src="DataTables5/media/js/jquery.dataTables10.min.js"></script>
+	<script type="text/javascript" language="javascript" src="DataTables5/extensions/Select/js/dataTables.select.min.js"></script>
+	<script type="text/javascript" language="javascript" src="DataTables5/extensions/Buttons/js/dataTables.buttons.min.js"></script>
+	<script type="text/javascript" language="javascript" src="DataTables5/extensions/Buttons/js/buttons.flash.min.js"></script>
+        <script type="text/javascript" language="javascript" src="DataTables5/extensions/pdfmake/pdfmake.min.js">
+	</script>
+	<script type="text/javascript" language="javascript" src="DataTables5/extensions/pdfmake/vfs_fonts.js"></script>
+	<script type="text/javascript" language="javascript" src="DataTables5/extensions/Buttons/js/buttons.html5.min.js"></script>
+	<script type="text/javascript" language="javascript" src="DataTables5/extensions/Buttons/js/buttons.print.min.js"></script>
+        <script type="text/javascript" language="javascript" src="DataTables5/extensions/Buttons/js/buttons.colVis.min.js"></script>
+        <script type="text/javascript" language="javascript" src="DataTables5/extensions/FixedHeader/js/dataTables.fixedHeader.min.js"></script>
+        <script type="text/javascript" language="javascript" src="DataTables5/extensions/ColReorder/js/dataTables.colReorder.min.js"></script>
+	<script type="text/javascript" src="DataTables5/extensions/ColumnFilter/js/ColumnFilterWidgets.js"></script>
+	<script type="text/javascript" language="javascript" src="DataTables5/extensions/RowGrouping/js/rowGrouping.js"></script>
+
+<!-- Required chart related js files -->
+<script src="FusionChartsJS/FusionCharts.js" type="text/javascript"></script>
+
+<script type="text/javascript" charset="utf-8">
+var $m = jQuery.noConflict();
+$m(document).ready(function() {
+
+
+if($m('table#sorttedtable tr th[class="HIDE"]').index()>=0) {hidecolvalue=$m('table#sorttedtable tr th[class="HIDE"]').map(function() {return $m(this).index()}).get().join(',')} else {hidecolvalue='-1,'};
+
+numofhides = $m('[class="HIDE"]').length;
+
+if($m('table#sorttedtable tr th[class="NOCF"]').index()>=0) {nocfcolvalue=$m('table#sorttedtable tr th[class="NOCF"]').map(function() {return $m(this).index()}).get().join(',')} else {nocfcolvalue='-1'};
+
+hideandnocf = hidecolvalue.concat(',',nocfcolvalue);
+
+nofilter = hideandnocf.split(',');
+
+  var oTable  = $m('#sorttedtable').dataTable( {
+
+        dom: 'B~[if#usecolfilt.~([06]UseColFilt)=1]W[/if#usecolfilt]lfrtip',
+
+        select: {
+~[if#NRS.~([06]NoRowSel)=]style: 'multi+shift'[else#NRS]style: 'single'[/if#NRS] 
+        },
+
+"order": [],
+
+        buttons: [
+{extends: 'text',
+ text: 'Select Results',   
+action: function ( nButton, oConfig, oFlash) {
+oTable.api().rows( {page:'current'} ).select();
+                    },
+                          },
+'selectNone',
+~[if#usecolfilt.~([06]UseColFilt)=1][else#usecolfilt]~[if#userowgrps.~([06]UseRowGroups)=1][else#userowgrps]
+~[if#shoshc.~([06]ShowSHC)=1]
+	{extend: 'colvis', text: 'Show / Hide Columns', postfixButtons: [ 'colvisRestore' ]},
+[/if#shoshc]
+[/if#userowgrps][/if#usecolfilt]
+~[if#copy.~([06]HideCopy)=]
+	{extend: 'copy', text: 'Copy', titleAttr: 'Be sure to Select Results first.', exportOptions: { rows: { selected: true }, columns: ':visible', modifier: { search: 'applied' }}},
+[/if#copy]
+~[if#csv.~([06]HideCSV)=]
+	{extend: 'csv', text: 'CSV', titleAttr: 'Be sure to Select Results first.', exportOptions: { rows: { selected: true }, columns: ':visible', modifier: { search: 'applied' }}  ~[if#csv2.~([06]NoCSVQuotes)=1], fieldBoundary: ''[/if#csv2] ~[if#csv3.~([06]NoHeaderRow)=1], header: false[/if#csv3]},
+[/if#csv]
+~[if#tab.~([06]HideTab)=]
+	{extend: 'csv', text: 'TAB', titleAttr: 'Be sure to Select Results first.', exportOptions: { rows: { selected: true }, columns: ':visible', modifier: { search: 'applied' }}, charset: 'utf8', fieldBoundary: '', fieldSeparator: '\t', extension: '.txt' ~[if#tab2.~([06]NoHeaderRow)=1], header: false[/if#tab2]},
+[/if#tab]
+~[if#print.~([06]HidePrint)=]
+	{extend: 'print', autoPrint: false, text: 'Print', titleAttr: 'Be sure to Select Results first.  The browser print feature works best.', exportOptions: {  rows: { selected: true }, columns: ':visible', modifier: { search: 'applied' }}, message: "~(Value)~[if.~([06]AddAfterTitle)>a] - ~([06]P1PassedValue)[/if]"},
+[/if#print]
+~[if#pdf.~([06]HidePDF)=]
+	{extend: 'pdf', text: 'PDF', titleAttr: 'Be sure to Select Results first.', exportOptions: { rows: { selected: true }, columns: ':visible', modifier: { search: 'applied' }}, title: "~(Value)~[if.~([06]AddAfterTitle)>a] - ~([06]P1PassedValue)[/if]", ~[if.~([06]PdfOrientation)=1] orientation: 'landscape'[/if]},
+[/if#pdf]
+        ],
+
+~[if#rownum.~([06]ValueLi4)=1]  
+"fnDrawCallback": function ( oSettings ) {
+            var that = this;
+            /* Need to redo the counters if filtered or sorted */
+            if ( oSettings.bSorted || oSettings.bFiltered )
+            {
+              this.$('td:first-child', {"filter":"applied"}).each( function (i) {
+                    that.fnUpdate( i+1, this.parentNode, 0, false, false );
+                } );
+            }
+        },
+        "aoColumnDefs": [
+            { "bSortable": false, "aTargets": [ 0 ] }
+        ],	
+[/if#rownum]
+
+        "aoColumnDefs": [
+            { "bVisible": false, "aTargets": [ "HIDE"  ] },
+            { "bSearchable": false, "aTargets": [ "HIDE"  ] }
+        ],
+
+        "paging":   false,
+	"lengthChange": false,
+	"ordering": true,
+	"autoWidth": false,
+
+~[if#usecolfilt.~([06]UseColFilt)=1]"searching": true,[else#usecolfilt]~[if#showsrch.~([06]ShowSearchBox)=1]"searching": true,[else#showsrch]"searching": false,[/if#showsrch][/if#usecolfilt]
+
+~[if#sri.~([06]ShowResultsInfo)=1]"info": true,[else#sri]"info": false,[/if#sri]
+
+~[if.~([06]UseFixHdr)=1]fixedHeader: true,[/if]
+
+~[if#usecolfilt.~([06]UseColFilt)=1][else#usecolfilt]~[if#userowgrps.~([06]UseRowGroups)=1][else#userowgrps]
+~[if#usecolre.~([06]UseColRe)=1]colReorder: true,[/if#usecolre]
+[/if#userowgrps][/if#usecolfilt]
+
+	"oColumnFilterWidgets": {"aiExclude": nofilter},
+
+    } );
+} );
+
+</script>
+
+<link href="/images/css/screen.css" rel="stylesheet" media="screen">
+<link href="/images/css/print.css" rel="stylesheet" media="print">
+
+<script type="text/javascript">
+function displayQuery() {
+                              var sQuery = $j('#sqlDisplay').html().replace('\n','');
+                              sQuery = sQuery.replace(/%param1%/g,$j('#pVal1').val());
+                              sQuery = sQuery.replace(/%param2%/g,$j('#pVal2').val());              
+                              sQuery = sQuery.replace(/%param3%/g,$j('#pVal3').val());              
+                              sQuery = sQuery.replace(/%param4%/g,$j('#pVal4').val());              
+                              sQuery = sQuery.replace(/%param5%/g,$j('#pVal5').val());                                                            //alert('sQuery='+sQuery+ ' pVal1='+$j('#pVal1').val());
+                              sQuery = sQuery.replace(/&lt;/g,'<').replace(/&gt;/g,'>');
+                              $j('#sqlDisplay').text(sQuery);
+                              $j('#sqlDisplay').show();
+}
+</script>
+<style>
+@media print {
+  #header, .dt-buttons, .column-filter-widgets, .dataTables_filter, .dataTables_info {
+    display: none; }
+
+.box-round {
+    border: 0px ;
+  }
+}
+</style>
+~[wc:commonscripts]
+</head>
+
+<body onload="chartit();">
+
+~[wc:admin_header_css]<!-- breadcrumb start --><a href="/admin/home.html">Start Page</a> &gt; <a href="home.html?frn=~(userfrn)">sqlReports</a> &gt; <a href="params.html?frn=~[gpv:frn]&lrn=~(userfrn)">Run sqlReport</a> ~[if.security.inrole=~[displaypref:sqlReportsAdminGrp]]| <a href="edit.html?frn=~[gpv:frn]&lrn=~(userfrn)">Edit sqlReport</a>[/if] &gt; ~(Value)<!-- breadcrumb end -->~[wc:admin_navigation_css]
+
+<!-- start of title -->
+<DIV id="sqlReport">
+<table width="100%" border="0" cellspacing="0" cellpadding="4">
+<tr>
+<td><h1>~(Value) ~[if.~([06]AddAfterTitle)>a]- ~([06]P1PassedValue)[/if]</h1></td>
+</tr>
+<tr>
+<td colspan="2">Parameters - ~[if.~([06]ParamName1)>a]<b>~([06]ParamName1):</b> ~([06]ParamVal1) &nbsp;&nbsp;[/if] <!-- added colspan for print format -->
+~[if.~([06]ParamName2)>a]<b>~([06]ParamName2):</b> ~([06]ParamVal2) &nbsp;&nbsp;[/if]
+~[if.~([06]ParamName3)>a]<b>~([06]ParamName3):</b> ~([06]ParamVal3) &nbsp;&nbsp;[/if]
+~[if.~([06]ParamName4)>a]<b>~([06]ParamName4):</b> ~([06]ParamVal4) &nbsp;&nbsp;[/if]
+~[if.~([06]ParamName5)>a]<b>~([06]ParamName5):</b> ~([06]ParamVal5)[/if]
+</td>
+</tr>
+~[if.security.inrole=~[displaypref:sqlReportsAdminGrp]]~[if#VL3.~([06]ValueLi3)=1]
+<div class="debugInfo"> <p><b><a href="#" onClick="displayQuery();">Display SQL Query</a></b><span style="display:none;" id="sqlDisplay"> ~([06]ValueT;replace=[cr],[sp])</span><input type="hidden" id="pVal1" name="[06]ParamVal1" value=""><input type="hidden" id="pVal2" name="[06]ParamVal2" value=""><input type="hidden" id="pVal3" name="[06]ParamVal3" value=""><input type="hidden" id="pVal4" name="[06]ParamVal4" value=""><input type="hidden" id="pVal5" name="[06]ParamVal5" value=""></p>
+<p><b><a target="_blank" href="/admin/tech/log/viewsystemlog.html?filename=&maxlines=100&find=ORA-&mode=search">Check System Log for Error Messages</b></a> (opens in a new tab, older errors listed first)</p></div>
+[/if#VL3][/if]
+</table>
+<!-- end of title -->
+
+<!-- start bounding box -->
+
+
+<!-- start content -->
+<!-- Start of chart -->
+   <div class="box-round" id="chartdiv" position: relative;">
+<h2 class="toggle expanded">Chart Parameters - </h2>
+<table border="0" cellspacing="0" cellpadding="4">
+<tr class="~[evenoddrow;reset]">
+<td class="bold">Chart Type ~[if#chrtcnt.~[gpv:NoOfChartCols]<3][else#chrtcnt]<img src="/images/icon-help.gif" height="16" width="16" border="0" align="absmiddle" alt="Multi-Series charts will chart all the columns in the table at the bottom of the page.  Single Series charts will only chart the first two columns." title="Multi-Series charts will chart all the columns in the table at the bottom of the page.  Single Series charts will only chart the first two columns.">[/if#chrtcnt]</td>
+<td><select id="chartType">
+	<option value="">-- Initial Chart --</option>
+<option selected="selected" value="~([06]InitialsqlChart)">~([06]InitialChartName)</option>
+~[if#chrtcnt3.~[gpv:NoOfChartCols]<3][else#chrtcnt3]
+<option value=""></option>
+	<option value="">-- Multi-Series Charts --</option>
+	<option value="MSArea">MS Area</option>
+	<option value="MSBar2D">MS Bar 2D</option>
+	<option value="MSBar3D">MS Bar 3D</option>
+	<option value="MSColumn2D">MS Column 2D</option>
+	<option value="MSColumn3D">MS Column 3D</option>
+	<option value="MSLine">MS Line</option>
+	<option value="Marimekko">MS Marimekko</option>
+	<option value="StackedArea2D">MS Stacked Area</option>
+	<option value="StackedBar2D">MS Stacked Bar 2D</option>
+	<option value="StackedBar3D">MS Stacked Bar 3D</option>
+	<option value="StackedColumn2D">MS Stacked Column 2D</option>
+	<option value="StackedColumn3D">MS Stacked Column 3D</option>
+	<option value="ScrollArea2D">MS Scroll Area</option>	
+	<option value="ScrollColumn2D">MS Scroll Column</option>
+	<option value="ScrollLine2D">MS Scroll Line</option>	
+	<option value="ZoomLine">MS Zoom Line</option>
+[/if#chrtcnt3]
+<option value=""></option>
+	~[if#chrtcnt2.~[gpv:NoOfChartCols]<3]<option value="">-- Possible Charts --</option>[else#chrtcnt2]<option value="">-- Single Series Charts --</option>[/if#chrtcnt2]
+<option value="Area2D">Area</option>
+<option value="Bar2D">Bar</option>
+<option value="Column2D">Column 2D</option>
+<option value="Column3D">Column 3D</option>
+<option value="Doughnut2D">Doughnut 2D</option>
+<option value="Doughnut3D">Doughnut 3D</option>
+<option value="Line">Line</option>
+<option value="Pareto2D">Pareto 2D</option>
+<option value="Pareto3D">Pareto 3D</option>
+<option value="Pie2D">Pie 2D</option>
+<option value="Pie3D">Pie 3D</option>
+
+	</select>
+</td>
+<td class="bold">Chart Size (in pixels)</td>
+<td>Width:&nbsp;<input type="text" name="chartwidth" id="chartwidth" value="600" size="4">&nbsp;Height:&nbsp;<input type="text" name="chartheight" id="chartheight" value="400" size="4"></td>
+</tr>
+<tr class="~[evenoddrow]">
+<td class="bold">Chart Title</td>
+<td><input type="text" name="charttitle" id="charttitle" value="~(Value)" size="36"></td>
+<td class="bold">Pie / Doughnut Charts Only</td>
+<td>
+<select name="chartpiedisplay" id="chartpiedisplay">
+<option value="0">Display Values
+<option value="1">Display Percents
+</select>
+</td>
+</tr>
+<tr class="~[evenoddrow]">
+<td class="bold">Chart Sub Title</td>
+<td><input type="text" name="chartsubtitle" id="chartsubtitle" value="~([06]P1PassedValue)" size="36"></td>
+<td class="bold">Stacked Bar / Column Only</td>
+<td>
+<select name="stackedtotals" id="stackedtotals">
+<option value="0">Values Only
+<option value="1">Values + Totals
+</select>
+</td>
+</tr>
+<tr class="~[evenoddrow]">
+<td class="bold">X Axis Label</td>
+<td><input type="text" id="chartxaxis" name="chartxaxis" value="~([06]ValueT2;allbefore=</th>;allafter=>)" size="36"></td>
+<td class="bold">Background Color</td>
+<td>
+<select id="chartbgcolor" name="chartbgcolor">
+<option value="">Default</option>
+<option value="FFFFFF">White</option>
+</select>
+</td>
+</tr>
+<tr class="~[evenoddrow]">
+<td class="bold">Y Axis Label</td>
+<td><input type="text" id="chartyaxis" name="chartyaxis" value="" size="36"></td>
+<td class="bold">Border Around Chart</td>
+<td>
+<select id="chartborder" name="chartborder">
+<option value="1">Yes
+<option value="0">No
+</select>
+</td>
+</tr>
+<tr>
+<td class="bold">Starting Y Value</td>
+<td><input type="text" name="chartystartvalue" id="chartystartvalue" value="" size="10"></td>
+<td colspan="2" align="right"><input type="button" value="Submit" border="0" id="btnUpdate"></td>
+</tr>
+</table>
+</div>
+
+   <div id="chartlocation" style="margin: 0 auto;  position: relative; padding-top: 20px; padding-bottom: 40px;"><h2><center>Your Chart Will Appear Here After You Click Submit</center></h2></div>
+
+<script type="text/javascript">
+function chartit() {
+
+	$j("#btnUpdate").unbind('click').click( function () {
+
+	  var SSseries="";var series="";var lLabel='';var fieldNames=[];var column0=[];var dataset=[];var SScharts=["Area2D","Bar2D","Column2D","Column3D","Doughnut2D","Doughnut3D","Line","Pareto2D","Pareto3D","Pie2D","Pie3D"]
+	numberOfCategories=0;numRows=0;category='"<categories>';
+	var table = document.getElementById('sorttedtable');
+            $j('tr', table).each( function(i) {
+                var tr = this;
+                $j('th, td', tr).each( function(j) {
+
+      if (i == 0) { 
+	newCat = $j(this).text();
+	fieldNames.splice(j,0,newCat);
+						numberOfCategories=numberOfCategories + 1;
+						};
+	if (i>0) {  //i is row number
+		if (j==0) {
+
+	           lLabel=$j(this).text();
+			categoryAdded=0
+				}
+		if (j>0) { // this is not the 1st column
+		dValue=$j(this).text();
+		if (parseFloat(dValue) >= 0) {
+		if (i==1) {
+			dataset[j]='\"' +"<dataset seriesName='"+fieldNames[j]+"'>";
+
+				};
+		if (categoryAdded == 0) { 
+								category=category+"<category label='"+lLabel.replace("'",'')+"' />";
+		xAxis=fieldNames[0].replace("'",'');
+		categoryAdded = 1;
+		SSseries=SSseries+'<set label="'+lLabel+'" value="'+dValue+'"/>';
+						}
+		series=series+'<set label="'+lLabel+'" value="'+dValue+'"/>';
+
+		dataset[j]=dataset[j]+"<set value='"+ dValue+"' />";
+							}
+							}
+                        }
+			numRows=numRows+1;
+                    });
+				});
+		for (a = 1; a < dataset.length; a++) {if (typeof dataset[a] !== 'undefined') dataset[a]=dataset[a]+'</dataset>"';
+				}
+		category=category+'</categories>"';
+			dataset = dataset.join('');
+
+			series=category+dataset;
+
+if ($j.inArray(document.getElementById("chartType").value, SScharts) > -1) {
+               series = SSseries;
+            };
+
+	  if  ( FusionCharts( "myChartId" ) )  FusionCharts( "myChartId" ).dispose();
+FusionCharts.setCurrentRenderer('javascript');
+ FusionCharts.printManager.enabled(true);
+	  var cChartType= "FusionChartsJS/"+document.getElementById("chartType").value;
+	  var myChart = new FusionCharts(cChartType, "myChartId", "100%", "100%",  "0");
+      myChart.setDataXML("<graph caption='"+document.getElementById("charttitle").value+"' subcaption='"+document.getElementById("chartsubtitle").value+"'  xAxisName='"+document.getElementById("chartxaxis").value+"'  yAxisName='"+document.getElementById("chartyaxis").value+"' showNames='1' formatNumberScale='0' bgColor='"+document.getElementById("chartbgcolor").value+"' showBorder='"+document.getElementById("chartborder").value+"' chartLeftMargin='20' chartRightMargin='50' showPercentValues='"+document.getElementById("chartpiedisplay").value+"' showSum='"+document.getElementById("stackedtotals").value+"' yAxisMinValue='"+document.getElementById("chartystartvalue").value+"'>"+series+"</graph>");
+      myChart.configure( {
+			'showShadow' : '1',
+			'InvalidXMLText' : ' There is non-numeric data in the chart results, or other invalid data.'
+	  });
+	  
+document.getElementById("chartlocation").style.height=""+document.getElementById("chartheight").value+"px";
+	  document.getElementById("chartlocation").style.width=""+document.getElementById("chartwidth").value+"px";
+
+	  document.getElementById("chartdiv").style.display="block";
+
+      myChart.render("chartlocation");
+
+	  //};
+	//}
+	} );
+}
+</script>
+
+
+
+<!-- End of chart -->
+<div class="box-round"><p>To save the chart, outline the chart and save it using software on your computer that does screen snippets, such as Snipping Tool for Windows or Grab for Macs.</p></div>
+
+<div class="box-round"><h2>Data Used To Create The Chart</h2>
+~[if#chrtcnt4.~[gpv:NoOfChartCols]<3][else#chrtcnt4]<p>Multi-Series charts will chart all the columns in the table below.  Single Series charts will only chart the first two columns.</p>[/if#chrtcnt4]
+
+<!-- table top -->
+<table  class="display" id="sorttedtable" width="100%" border="0" cellspacing="0" cellpadding="4">
+<!-- header record stored in [gen]valueT2 -->
+<thead>
+<tr bgcolor="#f6f6f6" class="bold">
+
+	~(ValueT2)
+</tr>
+</thead>
+<!-- tlist sql built from the paramaters page -->
+~[gpv:sqlOutput;;replace=sqlReports,ascii(126)]
+</table>
+<br>
+</div>
+<!-- end content -->
+
+<br>
+<!-- end bounding box -->
+<div align=center><p class="disclaimer noprint">sqlCharts v. 2.0.  &copy; 2013 - present day, SIS Resources.  All rights reserved.</p></div>
+<div align=center><p class="disclaimer noprint" style="text-align:center; font-size:10px">sqlReports (v. 5.4.0) -  &copy; 2013 - present day, SIS Resources.  All rights reserved.</p></div>
+</DIV>
+~[wc:admin_footer_css]
+
+</body>
+</html><!-- non framed -->
