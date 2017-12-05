@@ -13,7 +13,7 @@
   	});
 
   	require(['link'], function (link) {
-  		link.main();
+  		link.default();
   	});
   </script>
 <!-- sqlReports 5 end -->
